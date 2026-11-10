@@ -1,0 +1,11 @@
+{
+  "python": "3.12.13 (main, Jul 10 2026, 00:56:33) [MSC v.1944 64 bit (AMD64)]",
+  "executavel": "C:\\PROGRA~1\\QGIS34~1.13\\bin\\python3.exe",
+  "GDAL": "GDAL 3.13.2 \"Iowa City\", released 2026/07/20",
+  "numpy": "2.4.6",
+  "scipy": "1.18.0",
+  "shapely": "2.1.2",
+  "pillow": "12.3.0",
+  "PyYAML": "6.0.3",
+  "matplotlib": "3.11.0"
+}

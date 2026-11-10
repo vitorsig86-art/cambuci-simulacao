@@ -1,0 +1,287 @@
+{
+ "cafe_m": 0.8,
+ "banana_m": 8.0,
+ "alterna_m": 4.0,
+ "area_ha": 1.2183,
+ "area_plantavel_ha": 1.2183,
+ "corredor_estradas_na_area_m2": null,
+ "linhas": 27,
+ "comprimento_linhas_m": 2930.6,
+ "antes_dos_cortes": {
+  "cafe": 3294,
+  "banana": 371
+ },
+ "cortes": {
+  "estrada": {
+   "cafe": 0,
+   "banana": 0
+  },
+  "quebra_vento": {
+   "cafe": 181,
+   "banana": 21
+  },
+  "arvore_existente": {
+   "cafe": 213,
+   "banana": 25
+  }
+ },
+ "plantas": {
+  "cafe": 2900,
+  "banana": 325,
+  "grevilea": 77
+ },
+ "por_ha": {
+  "cafe": 2380,
+  "banana": 267,
+  "grevilea": 63
+ },
+ "por_ha_plantavel": {
+  "cafe": 2380,
+  "banana": 267,
+  "grevilea": 63
+ },
+ "quebra_vento": {
+  "origem": "proposta do pipeline",
+  "especie": "grevilea",
+  "azimute_vento_graus": 45.0,
+  "fonte_vento": "hipótese demonstrativa herdada da Jurema: vento de 45 graus (NE); sem medição ou rosa dos ventos de Cambuci",
+  "renques": 2,
+  "trechos": 7,
+  "arvores": 77,
+  "comprimento_m": 208.0,
+  "comprimento_por_renque_m": {
+   "1": 109.1,
+   "2": 98.9
+  },
+  "entre_arvores_m": 3.0,
+  "entre_renques_m": 3.0,
+  "cortes": {
+   "drenagem": 12,
+   "arvore_existente": 6,
+   "nao_exposta": 221
+  },
+  "abertura_estrada_m": null,
+  "perimetro_exposto_pct": 22.0,
+  "angulo_com_o_vento": "renque ideal fica a 90° do vento; aqui segue a borda, a até 60° da perpendicular",
+  "nota": "proteção = n × (altura do renque − desnível do ponto acima do pé do renque). Em encosta, renque morro abaixo protege menos",
+  "bordas_usadas": [
+   "leste",
+   "nordeste",
+   "norte"
+  ],
+  "status": "hipótese demonstrativa; vento de 45° não medido"
+ },
+ "quebra_vento_tabela": [
+  {
+   "altura_m": 2,
+   "c": {
+    "cafe_protegido_pct": 54.7,
+    "area_protegida_pct": 52.5,
+    "faixa_competicao_m": 1.2,
+    "cafe_na_competicao_pct": 0.0
+   },
+   "p": {
+    "cafe_protegido_pct": 62.0,
+    "area_protegida_pct": 58.9,
+    "faixa_competicao_m": 1.0,
+    "cafe_na_competicao_pct": 0.0
+   },
+   "o": {
+    "cafe_protegido_pct": 67.0,
+    "area_protegida_pct": 63.3,
+    "faixa_competicao_m": 0.8,
+    "cafe_na_competicao_pct": 0.0
+   }
+  },
+  {
+   "altura_m": 4,
+   "c": {
+    "cafe_protegido_pct": 63.2,
+    "area_protegida_pct": 60.0,
+    "faixa_competicao_m": 2.4,
+    "cafe_na_competicao_pct": 0.6
+   },
+   "p": {
+    "cafe_protegido_pct": 69.8,
+    "area_protegida_pct": 65.8,
+    "faixa_competicao_m": 2.0,
+    "cafe_na_competicao_pct": 0.0
+   },
+   "o": {
+    "cafe_protegido_pct": 74.7,
+    "area_protegida_pct": 70.3,
+    "faixa_competicao_m": 1.6,
+    "cafe_na_competicao_pct": 0.0
+   }
+  },
+  {
+   "altura_m": 6,
+   "c": {
+    "cafe_protegido_pct": 69.7,
+    "area_protegida_pct": 65.8,
+    "faixa_competicao_m": 3.6,
+    "cafe_na_competicao_pct": 2.5
+   },
+   "p": {
+    "cafe_protegido_pct": 76.4,
+    "area_protegida_pct": 71.9,
+    "faixa_competicao_m": 3.0,
+    "cafe_na_competicao_pct": 1.6
+   },
+   "o": {
+    "cafe_protegido_pct": 81.5,
+    "area_protegida_pct": 76.7,
+    "faixa_competicao_m": 2.4,
+    "cafe_na_competicao_pct": 0.6
+   }
+  },
+  {
+   "altura_m": 8,
+   "c": {
+    "cafe_protegido_pct": 75.6,
+    "area_protegida_pct": 71.2,
+    "faixa_competicao_m": 4.8,
+    "cafe_na_competicao_pct": 4.2
+   },
+   "p": {
+    "cafe_protegido_pct": 82.6,
+    "area_protegida_pct": 77.9,
+    "faixa_competicao_m": 4.0,
+    "cafe_na_competicao_pct": 3.1
+   },
+   "o": {
+    "cafe_protegido_pct": 89.7,
+    "area_protegida_pct": 85.2,
+    "faixa_competicao_m": 3.2,
+    "cafe_na_competicao_pct": 2.0
+   }
+  },
+  {
+   "altura_m": 10,
+   "c": {
+    "cafe_protegido_pct": 81.2,
+    "area_protegida_pct": 76.6,
+    "faixa_competicao_m": 6.0,
+    "cafe_na_competicao_pct": 5.7
+   },
+   "p": {
+    "cafe_protegido_pct": 90.2,
+    "area_protegida_pct": 85.9,
+    "faixa_competicao_m": 5.0,
+    "cafe_na_competicao_pct": 4.6
+   },
+   "o": {
+    "cafe_protegido_pct": 92.0,
+    "area_protegida_pct": 88.2,
+    "faixa_competicao_m": 4.0,
+    "cafe_na_competicao_pct": 3.1
+   }
+  },
+  {
+   "altura_m": 12,
+   "c": {
+    "cafe_protegido_pct": 87.6,
+    "area_protegida_pct": 83.1,
+    "faixa_competicao_m": 7.2,
+    "cafe_na_competicao_pct": 7.1
+   },
+   "p": {
+    "cafe_protegido_pct": 92.4,
+    "area_protegida_pct": 88.6,
+    "faixa_competicao_m": 6.0,
+    "cafe_na_competicao_pct": 5.7
+   },
+   "o": {
+    "cafe_protegido_pct": 92.9,
+    "area_protegida_pct": 89.4,
+    "faixa_competicao_m": 4.8,
+    "cafe_na_competicao_pct": 4.2
+   }
+  },
+  {
+   "altura_m": 15,
+   "c": {
+    "cafe_protegido_pct": 92.7,
+    "area_protegida_pct": 89.1,
+    "faixa_competicao_m": 8,
+    "cafe_na_competicao_pct": 8.4
+   },
+   "p": {
+    "cafe_protegido_pct": 92.9,
+    "area_protegida_pct": 89.5,
+    "faixa_competicao_m": 6,
+    "cafe_na_competicao_pct": 5.7
+   },
+   "o": {
+    "cafe_protegido_pct": 92.9,
+    "area_protegida_pct": 89.5,
+    "faixa_competicao_m": 5,
+    "cafe_na_competicao_pct": 4.6
+   }
+  },
+  {
+   "altura_m": 18,
+   "c": {
+    "cafe_protegido_pct": 92.9,
+    "area_protegida_pct": 89.5,
+    "faixa_competicao_m": 8,
+    "cafe_na_competicao_pct": 8.4
+   },
+   "p": {
+    "cafe_protegido_pct": 92.9,
+    "area_protegida_pct": 89.5,
+    "faixa_competicao_m": 6,
+    "cafe_na_competicao_pct": 5.7
+   },
+   "o": {
+    "cafe_protegido_pct": 92.9,
+    "area_protegida_pct": 89.5,
+    "faixa_competicao_m": 5,
+    "cafe_na_competicao_pct": 4.6
+   }
+  }
+ ],
+ "sem_quebra_vento": {
+  "cafe_m": 0.8,
+  "banana_m": 8.0,
+  "alterna_m": 4.0,
+  "area_ha": 1.2183,
+  "area_plantavel_ha": 1.2183,
+  "corredor_estradas_na_area_m2": null,
+  "linhas": 27,
+  "comprimento_linhas_m": 2930.6,
+  "antes_dos_cortes": {
+   "cafe": 3294,
+   "banana": 371
+  },
+  "cortes": {
+   "estrada": {
+    "cafe": 0,
+    "banana": 0
+   },
+   "quebra_vento": {
+    "cafe": 0,
+    "banana": 0
+   },
+   "arvore_existente": {
+    "cafe": 215,
+    "banana": 25
+   }
+  },
+  "plantas": {
+   "cafe": 3079,
+   "banana": 346,
+   "grevilea": 0
+  },
+  "por_ha": {
+   "cafe": 2527,
+   "banana": 284,
+   "grevilea": 0
+  },
+  "por_ha_plantavel": {
+   "cafe": 2527,
+   "banana": 284,
+   "grevilea": 0
+  }
+ }
+}

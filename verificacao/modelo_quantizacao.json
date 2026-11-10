@@ -1,0 +1,85 @@
+{
+  "com": {
+    "n": 3302,
+    "XY_passo_m": 0.01,
+    "XY_erro_max_por_eixo_m": 0.0049990357851470435,
+    "XY_erro_max_radial_m": 0.007007498066848267,
+    "series": {
+      "conservador": {
+        "shape": [
+          31,
+          3302
+        ],
+        "vivas_conferidas": true,
+        "sem_saturacao": true,
+        "H_passo_m": 0.1,
+        "R_passo_m": 0.05,
+        "F": "ordinal 0 a 3, não kg"
+      },
+      "provavel": {
+        "shape": [
+          31,
+          3302
+        ],
+        "vivas_conferidas": true,
+        "sem_saturacao": true,
+        "H_passo_m": 0.1,
+        "R_passo_m": 0.05,
+        "F": "ordinal 0 a 3, não kg"
+      },
+      "otimista": {
+        "shape": [
+          31,
+          3302
+        ],
+        "vivas_conferidas": true,
+        "sem_saturacao": true,
+        "H_passo_m": 0.1,
+        "R_passo_m": 0.05,
+        "F": "ordinal 0 a 3, não kg"
+      }
+    }
+  },
+  "sem": {
+    "n": 3425,
+    "XY_passo_m": 0.01,
+    "XY_erro_max_por_eixo_m": 0.0049990357851470435,
+    "XY_erro_max_radial_m": 0.007007498066848267,
+    "series": {
+      "conservador": {
+        "shape": [
+          31,
+          3425
+        ],
+        "vivas_conferidas": true,
+        "sem_saturacao": true,
+        "H_passo_m": 0.1,
+        "R_passo_m": 0.05,
+        "F": "ordinal 0 a 3, não kg"
+      },
+      "provavel": {
+        "shape": [
+          31,
+          3425
+        ],
+        "vivas_conferidas": true,
+        "sem_saturacao": true,
+        "H_passo_m": 0.1,
+        "R_passo_m": 0.05,
+        "F": "ordinal 0 a 3, não kg"
+      },
+      "otimista": {
+        "shape": [
+          31,
+          3425
+        ],
+        "vivas_conferidas": true,
+        "sem_saturacao": true,
+        "H_passo_m": 0.1,
+        "R_passo_m": 0.05,
+        "F": "ordinal 0 a 3, não kg"
+      }
+    }
+  },
+  "economia_sha256": "4c58d3da0e2ffc3f80ee8f0894c25e13ece02383a1345138d3955df39f040bfa"
+}

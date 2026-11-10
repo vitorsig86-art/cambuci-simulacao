@@ -1,0 +1,144 @@
+{
+  "crs": "EPSG:31984",
+  "crs_vetores": "atribuído por inferência; procedência pendente",
+  "unidade_vertical": "m",
+  "datum_vertical": null,
+  "moldura": [
+    194130.082938933,
+    7616382.736833424,
+    194330.082938933,
+    7616565.736833424
+  ],
+  "rasters": {
+    "mds.tif": {
+      "geotransform": [
+        194130.08293893278,
+        0.599999999999965,
+        0.0,
+        7616565.736833424,
+        0.0,
+        -0.6
+      ],
+      "dimensoes": [
+        334,
+        306
+      ],
+      "epsg": 31984,
+      "bandas": [
+        {
+          "banda": 1,
+          "invalidos": 0,
+          "min": 432.10760498046875,
+          "max": 495.1444396972656
+        }
+      ],
+      "nodata": -32767.0
+    },
+    "mdt.tif": {
+      "geotransform": [
+        194130.08293893278,
+        0.599999999999965,
+        0.0,
+        7616565.736833424,
+        0.0,
+        -0.6
+      ],
+      "dimensoes": [
+        334,
+        306
+      ],
+      "epsg": 31984,
+      "bandas": [
+        {
+          "banda": 1,
+          "invalidos": 0,
+          "min": 432.5853576660156,
+          "max": 494.6134033203125
+        }
+      ],
+      "nodata": -32767.0
+    },
+    "orto.tif": {
+      "geotransform": [
+        194130.08293893278,
+        0.10000000000000582,
+        0.0,
+        7616565.736833424,
+        0.0,
+        -0.1000000000001014
+      ],
+      "dimensoes": [
+        2002,
+        1837
+      ],
+      "epsg": 31984,
+      "bandas": [
+        {
+          "banda": 1,
+          "invalidos": 0,
+          "min": 0.0,
+          "max": 254.0
+        },
+        {
+          "banda": 2,
+          "invalidos": 0,
+          "min": 2.0,
+          "max": 254.0
+        },
+        {
+          "banda": 3,
+          "invalidos": 0,
+          "min": 0.0,
+          "max": 244.0
+        },
+        {
+          "banda": 4,
+          "invalidos": 0,
+          "min": 255.0,
+          "max": 255.0
+        }
+      ],
+      "nodata": null
+    }
+  },
+  "entradas": {
+    "area_estudo.geojson": {
+      "sha256": "d44189919df5bb2dc3eec869732aadcb8a3c30b60ced97e17c26846558ebc383",
+      "bytes": 1876
+    },
+    "linhas_cultivo.geojson": {
+      "sha256": "d0bde394c341745181a1511bdbbe358c9146403f4f18ab26dd2b6999d7d5fccc",
+      "bytes": 51792
+    },
+    "mds.tif": {
+      "sha256": "1c30b5b08e5e82ff20360f035784681bedb85f358c519361b523c501691ca4aa",
+      "bytes": 515374
+    },
+    "mdt.tif": {
+      "sha256": "5d5408a1d24f2c57f8d92db954a93ea4f44b71865955ff2c823504b314b163e6",
+      "bytes": 515374
+    },
+    "orto.tif": {
+      "sha256": "935c6fea3607d9f09e938fd8b2d728e1c5df573e50ade91568857ef5cf01157a",
+      "bytes": 14273419
+    }
+  },
+  "vetores": {
+    "area_estudo.geojson": {
+      "feicoes": 1,
+      "ogr_xy_z_identicos": true,
+      "crs_atribuido": "EPSG:31984, inferido"
+    },
+    "linhas_cultivo.geojson": {
+      "feicoes": 30,
+      "ogr_xy_z_identicos": true,
+      "crs_atribuido": "EPSG:31984, inferido"
+    }
+  },
+  "poligono": {
+    "area_m2": 12183.366038182407,
+    "perimetro_m": 504.2361685176668,
+    "valido": true,
+    "furos": 0
+  }
+}

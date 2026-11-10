@@ -1,0 +1,1268 @@
+{
+ "rasters": {
+  "orto.tif": {
+   "epsg": "31984",
+   "res_m": 0.1,
+   "px": [
+    2002,
+    1837
+   ],
+   "bandas": 4,
+   "extensao": [
+    194130.08,
+    7616382.04,
+    194330.28,
+    7616565.74
+   ],
+   "origem": [
+    194130.083,
+    7616565.737
+   ],
+   "nodata": null
+  },
+  "mdt.tif": {
+   "epsg": "31984",
+   "res_m": 0.6,
+   "px": [
+    334,
+    306
+   ],
+   "bandas": 1,
+   "extensao": [
+    194130.08,
+    7616382.14,
+    194330.48,
+    7616565.74
+   ],
+   "origem": [
+    194130.083,
+    7616565.737
+   ],
+   "nodata": -32767.0
+  },
+  "mds.tif": {
+   "epsg": "31984",
+   "res_m": 0.6,
+   "px": [
+    334,
+    306
+   ],
+   "bandas": 1,
+   "extensao": [
+    194130.08,
+    7616382.14,
+    194330.48,
+    7616565.74
+   ],
+   "origem": [
+    194130.083,
+    7616565.737
+   ],
+   "nodata": -32767.0
+  }
+ },
+ "vetores": {
+  "area_estudo.geojson": {
+   "crs": "urn:ogc:def:crs:EPSG::31984",
+   "feicoes": 1,
+   "tipo": [
+    "Polygon"
+   ],
+   "extensao": [
+    194138.84,
+    7616388.37,
+    194304.9,
+    7616548.3
+   ],
+   "dentro_do_recorte": true,
+   "tem_z": false
+  },
+  "bbox.geojson": {
+   "crs": "urn:ogc:def:crs:EPSG::31984",
+   "feicoes": 1,
+   "tipo": [
+    "Polygon"
+   ],
+   "extensao": [
+    194130.08,
+    7616382.74,
+    194330.08,
+    7616565.74
+   ],
+   "dentro_do_recorte": true,
+   "tem_z": false
+  },
+  "linhas_cultivo.geojson": {
+   "crs": "urn:ogc:def:crs:EPSG::31984",
+   "feicoes": 30,
+   "tipo": [
+    "LineString"
+   ],
+   "extensao": [
+    194139.33,
+    7616392.57,
+    194303.45,
+    7616547.82
+   ],
+   "dentro_do_recorte": true,
+   "tem_z": true
+  }
+ },
+ "alinhamento": {
+  "mesmo_crs": true,
+  "mesma_origem": true,
+  "resolucoes_m": {
+   "orto.tif": 0.1,
+   "mdt.tif": 0.6,
+   "mds.tif": 0.6
+  },
+  "nota": "resoluções diferentes: o pipeline reamostra tudo para uma moldura comum (0,25 a 1 m)",
+  "moldura": [
+   194130.082938933,
+   7616382.736833424,
+   194330.082938933,
+   7616565.736833424
+  ]
+ },
+ "area_estudo_ha": 1.2183,
+ "perimetro_m": 504.2,
+ "recorte_ha": 3.66,
+ "area_dentro_do_recorte": true,
+ "centro": {
+  "E": 194222.6,
+  "N": 7616476.7,
+  "lat": -21.52842,
+  "lon": -41.95174
+ },
+ "altitude_m": {
+  "min": 446.2,
+  "media": 458.7,
+  "max": 470.9
+ },
+ "declividade_pct": {
+  "media": 24.3,
+  "p10": 18.9,
+  "mediana": 24.2,
+  "p90": 30.5,
+  "max": 40.7
+ },
+ "face_dominante": {
+  "graus": 313,
+  "nome": "noroeste"
+ },
+ "clima": {
+  "disponivel": false,
+  "alertas": [
+   "Clima local indisponível; aptidão não avaliada"
+  ],
+  "metodo": "Demonstração condicional de café e banana, sem diagnóstico de aptidão"
+ },
+ "chm": {
+  "p50": 0.0,
+  "p90": 0.84,
+  "p99": 18.29,
+  "max": 22.32,
+  "cobertura_pct": {
+   ">0.5m": 19.68,
+   ">1m": 8.2,
+   ">2.5m": 5.65,
+   ">5m": 5.04
+  }
+ },
+ "arvores_existentes": {
+  "altura_min_m": 2.5,
+  "manchas_de_copa_na_area": 2,
+  "area_copa_m2": 687.9,
+  "area_descontada_m2": 802.9,
+  "folga_m": 1.0,
+  "pct_da_area": 6.59,
+  "copa_no_entorno_m2": 2792.0,
+  "nota": "manchas de copa (CHM acima da altura mínima) dentro da área: ficam como estão e saem da área de plantio. A contagem de árvores individuais vem da etapa de entorno"
+ },
+ "linhas": {
+  "feicoes_no_arquivo": 30,
+  "trechos_dentro_da_area": 30,
+  "trechos_validos": 27,
+  "trechos_curtos": [
+   3,
+   24,
+   26
+  ],
+  "comprimento_total_m": 2935.9,
+  "comprimento_dentro_m": 2934.0,
+  "comprimento_valido_m": 2930.6,
+  "comprimento_fora_m": 1.9,
+  "feicoes_com_trecho_fora": [
+   {
+    "feicao": 1,
+    "cota": 447.0,
+    "fora_m": 0.6
+   },
+   {
+    "feicao": 2,
+    "cota": 448.0,
+    "fora_m": 1.3
+   }
+  ],
+  "feicoes_partidas_pela_borda": [],
+  "cruzamentos_entre_linhas": [],
+  "entrelinha_m": {
+   "min": 2.51,
+   "p5": 2.99,
+   "mediana": 3.95,
+   "p95": 5.29,
+   "max": 12.31
+  },
+  "pct_comprimento_entrelinha_menor_2_5m": 0.0,
+  "pct_comprimento_entrelinha_maior_5m": 6.6,
+  "angulo_com_curva_de_nivel_graus": {
+   "mediana": 0.4,
+   "p90": 1.4,
+   "max": 16.6
+  },
+  "declive_ao_longo_pct": {
+   "mediana": 0.2,
+   "p90": 0.6,
+   "max": 7.6
+  },
+  "pct_comprimento_declive_maior_3pct": 0.8,
+  "cota_atributo_menos_mdt_m": -0.0,
+  "azimute_graus": 42.9,
+  "entrelinha_m_mediana": 3.95,
+  "densidade_linear_m_ha": 2405,
+  "por_linha": [
+   {
+    "linha": 1,
+    "cota": 447.0,
+    "comp_m": 6.1,
+    "entrelinha_mediana_m": 3.72,
+    "entrelinha_min_m": 3.68,
+    "angulo_mediano_graus": 1.1,
+    "angulo_max_graus": 2.8,
+    "declive_ao_longo_pct": 0.5,
+    "curta": false
+   },
+   {
+    "linha": 2,
+    "cota": 448.0,
+    "comp_m": 17.9,
+    "entrelinha_mediana_m": 3.28,
+    "entrelinha_min_m": 2.94,
+    "angulo_mediano_graus": 0.6,
+    "angulo_max_graus": 2.3,
+    "declive_ao_longo_pct": 0.3,
+    "curta": false
+   },
+   {
+    "linha": 3,
+    "cota": 449.0,
+    "comp_m": 1.7,
+    "entrelinha_mediana_m": 4.32,
+    "entrelinha_min_m": 4.12,
+    "angulo_mediano_graus": 2.6,
+    "angulo_max_graus": 3.5,
+    "declive_ao_longo_pct": 1.0,
+    "curta": true
+   },
+   {
+    "linha": 4,
+    "cota": 449.0,
+    "comp_m": 55.2,
+    "entrelinha_mediana_m": 3.82,
+    "entrelinha_min_m": 3.23,
+    "angulo_mediano_graus": 0.4,
+    "angulo_max_graus": 1.8,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 5,
+    "cota": 449.0,
+    "comp_m": 44.2,
+    "entrelinha_mediana_m": 3.28,
+    "entrelinha_min_m": 2.96,
+    "angulo_mediano_graus": 0.7,
+    "angulo_max_graus": 2.4,
+    "declive_ao_longo_pct": 0.3,
+    "curta": false
+   },
+   {
+    "linha": 6,
+    "cota": 450.0,
+    "comp_m": 129.5,
+    "entrelinha_mediana_m": 3.69,
+    "entrelinha_min_m": 2.59,
+    "angulo_mediano_graus": 0.5,
+    "angulo_max_graus": 4.9,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 7,
+    "cota": 451.0,
+    "comp_m": 133.8,
+    "entrelinha_mediana_m": 3.87,
+    "entrelinha_min_m": 2.52,
+    "angulo_mediano_graus": 0.6,
+    "angulo_max_graus": 4.5,
+    "declive_ao_longo_pct": 0.3,
+    "curta": false
+   },
+   {
+    "linha": 8,
+    "cota": 452.0,
+    "comp_m": 137.5,
+    "entrelinha_mediana_m": 4.35,
+    "entrelinha_min_m": 2.52,
+    "angulo_mediano_graus": 0.4,
+    "angulo_max_graus": 5.2,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 9,
+    "cota": 453.0,
+    "comp_m": 140.6,
+    "entrelinha_mediana_m": 4.58,
+    "entrelinha_min_m": 2.53,
+    "angulo_mediano_graus": 0.5,
+    "angulo_max_graus": 5.7,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 10,
+    "cota": 454.0,
+    "comp_m": 143.8,
+    "entrelinha_mediana_m": 4.32,
+    "entrelinha_min_m": 2.66,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 6.4,
+    "declive_ao_longo_pct": 0.1,
+    "curta": false
+   },
+   {
+    "linha": 11,
+    "cota": 455.0,
+    "comp_m": 145.7,
+    "entrelinha_mediana_m": 4.01,
+    "entrelinha_min_m": 2.51,
+    "angulo_mediano_graus": 0.4,
+    "angulo_max_graus": 5.7,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 12,
+    "cota": 456.0,
+    "comp_m": 147.0,
+    "entrelinha_mediana_m": 3.97,
+    "entrelinha_min_m": 2.52,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 6.6,
+    "declive_ao_longo_pct": 0.1,
+    "curta": false
+   },
+   {
+    "linha": 13,
+    "cota": 457.0,
+    "comp_m": 148.9,
+    "entrelinha_mediana_m": 3.96,
+    "entrelinha_min_m": 2.65,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 3.9,
+    "declive_ao_longo_pct": 0.1,
+    "curta": false
+   },
+   {
+    "linha": 14,
+    "cota": 458.0,
+    "comp_m": 151.9,
+    "entrelinha_mediana_m": 3.92,
+    "entrelinha_min_m": 2.68,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 11.8,
+    "declive_ao_longo_pct": 0.1,
+    "curta": false
+   },
+   {
+    "linha": 15,
+    "cota": 459.0,
+    "comp_m": 155.2,
+    "entrelinha_mediana_m": 3.97,
+    "entrelinha_min_m": 2.96,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 5.4,
+    "declive_ao_longo_pct": 0.1,
+    "curta": false
+   },
+   {
+    "linha": 16,
+    "cota": 460.0,
+    "comp_m": 157.8,
+    "entrelinha_mediana_m": 4.13,
+    "entrelinha_min_m": 2.9,
+    "angulo_mediano_graus": 0.4,
+    "angulo_max_graus": 11.3,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 17,
+    "cota": 461.0,
+    "comp_m": 160.7,
+    "entrelinha_mediana_m": 4.07,
+    "entrelinha_min_m": 2.86,
+    "angulo_mediano_graus": 0.4,
+    "angulo_max_graus": 6.0,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 18,
+    "cota": 462.0,
+    "comp_m": 163.8,
+    "entrelinha_mediana_m": 3.92,
+    "entrelinha_min_m": 2.87,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 12.2,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 19,
+    "cota": 463.0,
+    "comp_m": 167.2,
+    "entrelinha_mediana_m": 3.88,
+    "entrelinha_min_m": 2.89,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 5.5,
+    "declive_ao_longo_pct": 0.1,
+    "curta": false
+   },
+   {
+    "linha": 20,
+    "cota": 464.0,
+    "comp_m": 170.2,
+    "entrelinha_mediana_m": 3.83,
+    "entrelinha_min_m": 2.83,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 12.8,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 21,
+    "cota": 465.0,
+    "comp_m": 172.8,
+    "entrelinha_mediana_m": 3.85,
+    "entrelinha_min_m": 2.77,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 10.2,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 22,
+    "cota": 466.0,
+    "comp_m": 124.9,
+    "entrelinha_mediana_m": 3.81,
+    "entrelinha_min_m": 2.77,
+    "angulo_mediano_graus": 0.4,
+    "angulo_max_graus": 2.5,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 23,
+    "cota": 466.0,
+    "comp_m": 19.2,
+    "entrelinha_mediana_m": 3.85,
+    "entrelinha_min_m": 3.63,
+    "angulo_mediano_graus": 0.4,
+    "angulo_max_graus": 2.0,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 24,
+    "cota": 466.0,
+    "comp_m": 1.2,
+    "entrelinha_mediana_m": 3.6,
+    "entrelinha_min_m": 3.6,
+    "angulo_mediano_graus": 0.2,
+    "angulo_max_graus": 0.2,
+    "declive_ao_longo_pct": 0.1,
+    "curta": true
+   },
+   {
+    "linha": 25,
+    "cota": 467.0,
+    "comp_m": 74.8,
+    "entrelinha_mediana_m": 3.77,
+    "entrelinha_min_m": 3.08,
+    "angulo_mediano_graus": 0.7,
+    "angulo_max_graus": 7.1,
+    "declive_ao_longo_pct": 0.3,
+    "curta": false
+   },
+   {
+    "linha": 26,
+    "cota": 467.0,
+    "comp_m": 0.5,
+    "entrelinha_mediana_m": 3.64,
+    "entrelinha_min_m": 3.63,
+    "angulo_mediano_graus": 0.2,
+    "angulo_max_graus": 0.5,
+    "declive_ao_longo_pct": 0.1,
+    "curta": true
+   },
+   {
+    "linha": 27,
+    "cota": 467.0,
+    "comp_m": 10.6,
+    "entrelinha_mediana_m": 3.82,
+    "entrelinha_min_m": 3.64,
+    "angulo_mediano_graus": 0.3,
+    "angulo_max_graus": 2.5,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 28,
+    "cota": 468.0,
+    "comp_m": 63.9,
+    "entrelinha_mediana_m": 3.87,
+    "entrelinha_min_m": 3.3,
+    "angulo_mediano_graus": 0.5,
+    "angulo_max_graus": 6.6,
+    "declive_ao_longo_pct": 0.2,
+    "curta": false
+   },
+   {
+    "linha": 29,
+    "cota": 469.0,
+    "comp_m": 50.8,
+    "entrelinha_mediana_m": 4.4,
+    "entrelinha_min_m": 3.3,
+    "angulo_mediano_graus": 0.9,
+    "angulo_max_graus": 16.6,
+    "declive_ao_longo_pct": 0.4,
+    "curta": false
+   },
+   {
+    "linha": 30,
+    "cota": 470.0,
+    "comp_m": 36.5,
+    "entrelinha_mediana_m": 4.39,
+    "entrelinha_min_m": 3.71,
+    "angulo_mediano_graus": 1.3,
+    "angulo_max_graus": 4.2,
+    "declive_ao_longo_pct": 0.4,
+    "curta": false
+   }
+  ],
+  "comprimentos_precisos_m": {
+   "bruto": 2935.882208072314,
+   "dentro": 2934.025693428826,
+   "fora": 1.8565146434880262,
+   "elegivel": 2930.6357873460424
+  },
+  "curtos_detalhes": [
+   {
+    "origem": 3,
+    "trecho": 3,
+    "m": 1.6913122750055043
+   },
+   {
+    "origem": 23,
+    "trecho": 24,
+    "m": 1.161484818686366
+   },
+   {
+    "origem": 26,
+    "trecho": 26,
+    "m": 0.5371089890915598
+   }
+  ],
+  "sobreposicoes": []
+ },
+ "chm_nativo": {
+  "resolucao_m": 0.6,
+  "celulas_talhao": 33837,
+  "validas": 33837,
+  "min": -1.01947021484375,
+  "max": 22.656402587890625,
+  "negativos_pct": 29.822383781068062,
+  "maior_igual_2_5_pct": 5.526494665602742,
+  "unidade": "m",
+  "datum_vertical": "pendente",
+  "nota": "MDS − MDT nativo, antes de limitar negativos ou filtrar"
+ },
+ "chm_operacional": {
+  "resolucao_m": 0.25,
+  "resolucao_fonte_m": 0.6,
+  "metodo": "bilinear; máscaras validadas antes de subtrair; clip [0,30] m; mediana 3x3 (0,75 m); abaixo de 0,30 m = 0",
+  "copa": ">=2,50 m; abertura binária cruz 3x3; manchas >=1,5 m²; dilatação cruz 4 iterações, folga nominal 1 m",
+  "status": "copas propostas para preservação, interpretação pendente de conferência em campo"
+ },
+ "proximidade_borda": {
+  "limiar_m": 3,
+  "pontas": [
+   {
+    "origem": 1,
+    "trecho": 1,
+    "ponta": "inicio",
+    "dist_borda_m": 0.24269723102164723,
+    "curta": false
+   },
+   {
+    "origem": 1,
+    "trecho": 1,
+    "ponta": "fim",
+    "dist_borda_m": 2.1837656578012887e-10,
+    "curta": false
+   },
+   {
+    "origem": 2,
+    "trecho": 2,
+    "ponta": "inicio",
+    "dist_borda_m": 0.18074803553641755,
+    "curta": false
+   },
+   {
+    "origem": 2,
+    "trecho": 2,
+    "ponta": "fim",
+    "dist_borda_m": 8.465991196444578e-11,
+    "curta": false
+   },
+   {
+    "origem": 3,
+    "trecho": 3,
+    "ponta": "inicio",
+    "dist_borda_m": 0.15562755252940702,
+    "curta": true
+   },
+   {
+    "origem": 3,
+    "trecho": 3,
+    "ponta": "fim",
+    "dist_borda_m": 0.23995217467106195,
+    "curta": true
+   },
+   {
+    "origem": 4,
+    "trecho": 4,
+    "ponta": "inicio",
+    "dist_borda_m": 0.22340156683461743,
+    "curta": false
+   },
+   {
+    "origem": 4,
+    "trecho": 4,
+    "ponta": "fim",
+    "dist_borda_m": 0.16452005393530728,
+    "curta": false
+   },
+   {
+    "origem": 5,
+    "trecho": 5,
+    "ponta": "inicio",
+    "dist_borda_m": 0.1774850502605233,
+    "curta": false
+   },
+   {
+    "origem": 5,
+    "trecho": 5,
+    "ponta": "fim",
+    "dist_borda_m": 0.2339617129149146,
+    "curta": false
+   },
+   {
+    "origem": 6,
+    "trecho": 6,
+    "ponta": "inicio",
+    "dist_borda_m": 0.45281518924951564,
+    "curta": false
+   },
+   {
+    "origem": 6,
+    "trecho": 6,
+    "ponta": "fim",
+    "dist_borda_m": 0.428620116052019,
+    "curta": false
+   },
+   {
+    "origem": 7,
+    "trecho": 7,
+    "ponta": "inicio",
+    "dist_borda_m": 0.40437443075590507,
+    "curta": false
+   },
+   {
+    "origem": 7,
+    "trecho": 7,
+    "ponta": "fim",
+    "dist_borda_m": 0.39072760895014036,
+    "curta": false
+   },
+   {
+    "origem": 8,
+    "trecho": 8,
+    "ponta": "inicio",
+    "dist_borda_m": 0.2711531734238437,
+    "curta": false
+   },
+   {
+    "origem": 8,
+    "trecho": 8,
+    "ponta": "fim",
+    "dist_borda_m": 0.12970187886571646,
+    "curta": false
+   },
+   {
+    "origem": 9,
+    "trecho": 9,
+    "ponta": "inicio",
+    "dist_borda_m": 0.4143984990489006,
+    "curta": false
+   },
+   {
+    "origem": 9,
+    "trecho": 9,
+    "ponta": "fim",
+    "dist_borda_m": 0.30633796885124875,
+    "curta": false
+   },
+   {
+    "origem": 10,
+    "trecho": 10,
+    "ponta": "inicio",
+    "dist_borda_m": 0.25579563386252846,
+    "curta": false
+   },
+   {
+    "origem": 10,
+    "trecho": 10,
+    "ponta": "fim",
+    "dist_borda_m": 0.40961963127947215,
+    "curta": false
+   },
+   {
+    "origem": 11,
+    "trecho": 11,
+    "ponta": "inicio",
+    "dist_borda_m": 0.17661817413113995,
+    "curta": false
+   },
+   {
+    "origem": 11,
+    "trecho": 11,
+    "ponta": "fim",
+    "dist_borda_m": 0.34481299077159333,
+    "curta": false
+   },
+   {
+    "origem": 12,
+    "trecho": 12,
+    "ponta": "inicio",
+    "dist_borda_m": 0.4354848771597662,
+    "curta": false
+   },
+   {
+    "origem": 12,
+    "trecho": 12,
+    "ponta": "fim",
+    "dist_borda_m": 0.4483796767809491,
+    "curta": false
+   },
+   {
+    "origem": 13,
+    "trecho": 13,
+    "ponta": "inicio",
+    "dist_borda_m": 0.4846668913421212,
+    "curta": false
+   },
+   {
+    "origem": 13,
+    "trecho": 13,
+    "ponta": "fim",
+    "dist_borda_m": 0.4009020755888587,
+    "curta": false
+   },
+   {
+    "origem": 14,
+    "trecho": 14,
+    "ponta": "inicio",
+    "dist_borda_m": 0.3330555320049747,
+    "curta": false
+   },
+   {
+    "origem": 14,
+    "trecho": 14,
+    "ponta": "fim",
+    "dist_borda_m": 0.45279326968426176,
+    "curta": false
+   },
+   {
+    "origem": 15,
+    "trecho": 15,
+    "ponta": "inicio",
+    "dist_borda_m": 0.47093917366541044,
+    "curta": false
+   },
+   {
+    "origem": 15,
+    "trecho": 15,
+    "ponta": "fim",
+    "dist_borda_m": 0.24767700092536946,
+    "curta": false
+   },
+   {
+    "origem": 16,
+    "trecho": 16,
+    "ponta": "inicio",
+    "dist_borda_m": 0.5478525239328436,
+    "curta": false
+   },
+   {
+    "origem": 16,
+    "trecho": 16,
+    "ponta": "fim",
+    "dist_borda_m": 0.31293368027555657,
+    "curta": false
+   },
+   {
+    "origem": 17,
+    "trecho": 17,
+    "ponta": "inicio",
+    "dist_borda_m": 0.4756395248239185,
+    "curta": false
+   },
+   {
+    "origem": 17,
+    "trecho": 17,
+    "ponta": "fim",
+    "dist_borda_m": 0.3776689752847327,
+    "curta": false
+   },
+   {
+    "origem": 18,
+    "trecho": 18,
+    "ponta": "inicio",
+    "dist_borda_m": 0.1540207606611808,
+    "curta": false
+   },
+   {
+    "origem": 18,
+    "trecho": 18,
+    "ponta": "fim",
+    "dist_borda_m": 0.5309385992199693,
+    "curta": false
+   },
+   {
+    "origem": 19,
+    "trecho": 19,
+    "ponta": "inicio",
+    "dist_borda_m": 0.3838722907540714,
+    "curta": false
+   },
+   {
+    "origem": 19,
+    "trecho": 19,
+    "ponta": "fim",
+    "dist_borda_m": 0.03407637773357629,
+    "curta": false
+   },
+   {
+    "origem": 20,
+    "trecho": 20,
+    "ponta": "inicio",
+    "dist_borda_m": 0.20239164427472967,
+    "curta": false
+   },
+   {
+    "origem": 20,
+    "trecho": 20,
+    "ponta": "fim",
+    "dist_borda_m": 0.19808777511503325,
+    "curta": false
+   },
+   {
+    "origem": 21,
+    "trecho": 21,
+    "ponta": "inicio",
+    "dist_borda_m": 0.31176651397875055,
+    "curta": false
+   },
+   {
+    "origem": 21,
+    "trecho": 21,
+    "ponta": "fim",
+    "dist_borda_m": 0.2450734685081218,
+    "curta": false
+   },
+   {
+    "origem": 24,
+    "trecho": 22,
+    "ponta": "inicio",
+    "dist_borda_m": 0.2264783396110581,
+    "curta": false
+   },
+   {
+    "origem": 24,
+    "trecho": 22,
+    "ponta": "fim",
+    "dist_borda_m": 0.39091399101373225,
+    "curta": false
+   },
+   {
+    "origem": 22,
+    "trecho": 23,
+    "ponta": "inicio",
+    "dist_borda_m": 0.286994519380771,
+    "curta": false
+   },
+   {
+    "origem": 22,
+    "trecho": 23,
+    "ponta": "fim",
+    "dist_borda_m": 0.13876569003290187,
+    "curta": false
+   },
+   {
+    "origem": 23,
+    "trecho": 24,
+    "ponta": "inicio",
+    "dist_borda_m": 0.38364817437427806,
+    "curta": true
+   },
+   {
+    "origem": 23,
+    "trecho": 24,
+    "ponta": "fim",
+    "dist_borda_m": 0.21311610521573904,
+    "curta": true
+   },
+   {
+    "origem": 27,
+    "trecho": 25,
+    "ponta": "inicio",
+    "dist_borda_m": 0.5727544486133433,
+    "curta": false
+   },
+   {
+    "origem": 27,
+    "trecho": 25,
+    "ponta": "fim",
+    "dist_borda_m": 0.1345405777861908,
+    "curta": false
+   },
+   {
+    "origem": 26,
+    "trecho": 26,
+    "ponta": "inicio",
+    "dist_borda_m": 0.13013695503532635,
+    "curta": true
+   },
+   {
+    "origem": 26,
+    "trecho": 26,
+    "ponta": "fim",
+    "dist_borda_m": 0.2950861169552536,
+    "curta": true
+   },
+   {
+    "origem": 25,
+    "trecho": 27,
+    "ponta": "inicio",
+    "dist_borda_m": 0.3721892888931207,
+    "curta": false
+   },
+   {
+    "origem": 25,
+    "trecho": 27,
+    "ponta": "fim",
+    "dist_borda_m": 0.19674277887194275,
+    "curta": false
+   },
+   {
+    "origem": 28,
+    "trecho": 28,
+    "ponta": "inicio",
+    "dist_borda_m": 0.5554327245538125,
+    "curta": false
+   },
+   {
+    "origem": 28,
+    "trecho": 28,
+    "ponta": "fim",
+    "dist_borda_m": 0.12603881105411646,
+    "curta": false
+   },
+   {
+    "origem": 29,
+    "trecho": 29,
+    "ponta": "inicio",
+    "dist_borda_m": 0.2745390283428777,
+    "curta": false
+   },
+   {
+    "origem": 29,
+    "trecho": 29,
+    "ponta": "fim",
+    "dist_borda_m": 0.2069809423334992,
+    "curta": false
+   },
+   {
+    "origem": 30,
+    "trecho": 30,
+    "ponta": "inicio",
+    "dist_borda_m": 0.2988196671262096,
+    "curta": false
+   },
+   {
+    "origem": 30,
+    "trecho": 30,
+    "ponta": "fim",
+    "dist_borda_m": 0.3073478311014657,
+    "curta": false
+   }
+  ],
+  "pontas_abaixo_3m": 60,
+  "nota": "distância geométrica até a borda; não atesta cabeceira operacional nem acesso viário; não exclui plantas"
+ },
+ "grades": {
+  "0.5": {
+   "nx": 400,
+   "ny": 366,
+   "geotransform": [
+    194130.082938933,
+    0.5,
+    0.0,
+    7616565.736833424,
+    0.0,
+    -0.5
+   ],
+   "invalidos": 0
+  },
+  "1": {
+   "nx": 200,
+   "ny": 183,
+   "geotransform": [
+    194130.082938933,
+    1.0,
+    0.0,
+    7616565.736833424,
+    0.0,
+    -1.0
+   ],
+   "invalidos": 0
+  },
+  "0.25": {
+   "nx": 800,
+   "ny": 732,
+   "geotransform": [
+    194130.082938933,
+    0.25,
+    0.0,
+    7616565.736833424,
+    0.0,
+    -0.25
+   ],
+   "invalidos": 0
+  },
+  "0.1": {
+   "nx": 2000,
+   "ny": 1830,
+   "geotransform": [
+    194130.082938933,
+    0.1,
+    0.0,
+    7616565.736833424,
+    0.0,
+    -0.1
+   ],
+   "invalidos": 0
+  }
+ },
+ "crs_atribuicao": "GeoJSON original sem CRS; EPSG:31984 inferido, coordenadas XY/Z preservadas nas cópias normalizadas; OGR e Shapely conferidos",
+ "premissas": {
+  "medidos": [
+   "rasters e geometria",
+   "MDT e MDS − MDT",
+   "comprimentos, declividade e centroide"
+  ],
+  "inferidos": [
+   "CRS vetorial EPSG:31984",
+   "copas pelo CHM",
+   "drenagem estática limitada à moldura"
+  ],
+  "assumidos": [
+   "espécies e cultivares",
+   "data de implantação",
+   "uso anterior",
+   "espaçamentos",
+   "manejo",
+   "clima local",
+   "direção do vento",
+   "carbono e solo",
+   "custos e preços",
+   "datum vertical",
+   "procedência CRS vetorial"
+  ]
+ },
+ "interferencia_copas_linhas": [
+  {
+   "trecho": 1,
+   "origem": 1,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 2,
+   "origem": 2,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 3,
+   "origem": 3,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 4,
+   "origem": 4,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 5,
+   "origem": 5,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 6,
+   "origem": 6,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 7,
+   "origem": 7,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 8,
+   "origem": 8,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 9,
+   "origem": 9,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 10,
+   "origem": 10,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 11,
+   "origem": 11,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 12,
+   "origem": 12,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 13,
+   "origem": 13,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 14,
+   "origem": 14,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 15,
+   "origem": 15,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 16,
+   "origem": 16,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 17,
+   "origem": 17,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 18,
+   "origem": 18,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 19,
+   "origem": 19,
+   "comprimento_excluido_m": 12.482607589279828
+  },
+  {
+   "trecho": 20,
+   "origem": 20,
+   "comprimento_excluido_m": 24.51478380645835
+  },
+  {
+   "trecho": 21,
+   "origem": 21,
+   "comprimento_excluido_m": 28.065673055759866
+  },
+  {
+   "trecho": 22,
+   "origem": 24,
+   "comprimento_excluido_m": 30.763854496188166
+  },
+  {
+   "trecho": 23,
+   "origem": 22,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 24,
+   "origem": 23,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 25,
+   "origem": 27,
+   "comprimento_excluido_m": 32.42693419496892
+  },
+  {
+   "trecho": 26,
+   "origem": 26,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 27,
+   "origem": 25,
+   "comprimento_excluido_m": 0.0
+  },
+  {
+   "trecho": 28,
+   "origem": 28,
+   "comprimento_excluido_m": 30.11654643168482
+  },
+  {
+   "trecho": 29,
+   "origem": 29,
+   "comprimento_excluido_m": 22.267860198076377
+  },
+  {
+   "trecho": 30,
+   "origem": 30,
+   "comprimento_excluido_m": 8.719001367960377
+  }
+ ]
+}

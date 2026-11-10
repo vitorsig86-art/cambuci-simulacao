@@ -1,0 +1,144 @@
+{
+  "series": [
+    {
+      "desenho": "com",
+      "cenario": "conservador",
+      "n": 3302,
+      "anos": 31,
+      "bytes_por_serie": 102362
+    },
+    {
+      "desenho": "com",
+      "cenario": "provavel",
+      "n": 3302,
+      "anos": 31,
+      "bytes_por_serie": 102362
+    },
+    {
+      "desenho": "com",
+      "cenario": "otimista",
+      "n": 3302,
+      "anos": 31,
+      "bytes_por_serie": 102362
+    },
+    {
+      "desenho": "sem",
+      "cenario": "conservador",
+      "n": 3425,
+      "anos": 31,
+      "bytes_por_serie": 106175
+    },
+    {
+      "desenho": "sem",
+      "cenario": "provavel",
+      "n": 3425,
+      "anos": 31,
+      "bytes_por_serie": 106175
+    },
+    {
+      "desenho": "sem",
+      "cenario": "otimista",
+      "n": 3425,
+      "anos": 31,
+      "bytes_por_serie": 106175
+    }
+  ],
+  "browser": {
+    "carregamento_ms": 905,
+    "malha": {
+      "vertices": 146400,
+      "triangulos": 291270,
+      "tipo_indice": "Uint32Array",
+      "three": "187",
+      "render": {
+        "frame": 2,
+        "calls": 44,
+        "triangles": 2743570,
+        "points": 0,
+        "lines": 7275
+      },
+      "webgl": true
+    },
+    "relogio": "Sol a 36° de altura, vindo do NO (azimute 325°). Cerca de 13:49 no relógio (UTC−3), pela longitude 41,95° O. Sombras das árvores e plantas sobre o MDT; sem serras externas nem nuvens.",
+    "construir_ms": [
+      {
+        "ano": 0,
+        "ms": 16.700000047683716
+      },
+      {
+        "ano": 5,
+        "ms": 24.19999998807907
+      },
+      {
+        "ano": 15,
+        "ms": 29.69999998807907
+      },
+      {
+        "ano": 30,
+        "ms": 33.60000002384186
+      }
+    ],
+    "animacao": {
+      "ano": 2.819879999999993,
+      "frames": 3,
+      "duracao_ms": 1350,
+      "fps": 1.4814814814814814
+    },
+    "persistencia_isolada": true,
+    "enquadramento": {
+      "vertices_fora": 0,
+      "largura_fracao": 0.7803999355970825
+    },
+    "mobile": {
+      "width": 390,
+      "scrollWidth": 390,
+      "canvasWidth": 368
+    },
+    "erros": [],
+    "requisicoes_falhas": [],
+    "externas": []
+  },
+  "paridade": [
+    {
+      "desenho": "com",
+      "cenario": "conservador",
+      "relatorio_interface": "iguais ao centavo; tolerância numérica absoluta 1e-7",
+      "vpl": -452941.6080407922
+    },
+    {
+      "desenho": "com",
+      "cenario": "provavel",
+      "relatorio_interface": "iguais ao centavo; tolerância numérica absoluta 1e-7",
+      "vpl": -61730.786680298566
+    },
+    {
+      "desenho": "com",
+      "cenario": "otimista",
+      "relatorio_interface": "iguais ao centavo; tolerância numérica absoluta 1e-7",
+      "vpl": 451571.3849603823
+    },
+    {
+      "desenho": "sem",
+      "cenario": "conservador",
+      "relatorio_interface": "iguais ao centavo; tolerância numérica absoluta 1e-7",
+      "vpl": -464727.1271547767
+    },
+    {
+      "desenho": "sem",
+      "cenario": "provavel",
+      "relatorio_interface": "iguais ao centavo; tolerância numérica absoluta 1e-7",
+      "vpl": -71207.88870871124
+    },
+    {
+      "desenho": "sem",
+      "cenario": "otimista",
+      "relatorio_interface": "iguais ao centavo; tolerância numérica absoluta 1e-7",
+      "vpl": 466158.2749121457
+    }
+  ],
+  "motor_embutido_identico": true,
+  "html_bytes": 6064696,
+  "max_diferenca_numerica": 2.9103830456733704e-11,
+  "status": "PASSOU",
+  "playwright": "1.65.0"
+}

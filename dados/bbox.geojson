@@ -1,0 +1,44 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::31984"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "origem": "interseção coberta, moldura 200 x 183 m"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              194330.082938933,
+              7616382.736833424
+            ],
+            [
+              194330.082938933,
+              7616565.736833424
+            ],
+            [
+              194130.082938933,
+              7616565.736833424
+            ],
+            [
+              194130.082938933,
+              7616382.736833424
+            ],
+            [
+              194330.082938933,
+              7616382.736833424
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

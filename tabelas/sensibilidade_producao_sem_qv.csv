@@ -1,0 +1,13 @@
+premissa,variacao,cafes,bananas,cafe_sc,banana_t,co2e30,solo30,d_cafe_sc_pct,d_banana_t_pct,d_co2e30_pct,d_solo30_pct
+Densidade de café,"café a cada 0,6 m",4214,358,703.86,89.79,45.55,16.8,19.0,3.0,28.0,0.0
+Densidade de café,"café a cada 1,0 m",2400,346,522.23,88.1,29.47,16.8,-12.0,1.0,-17.0,0.0
+Densidade de café,"café a cada 1,2 m",1947,332,468.8,83.64,25.52,16.8,-21.0,-4.0,-28.0,0.0
+Banana,banana a cada 4 m,2731,694,515.33,174.72,41.78,16.8,-13.0,100.0,18.0,0.0
+Banana,banana a cada 12 m,3192,233,619.04,58.77,33.37,16.8,4.0,-33.0,-6.0,0.0
+Banana,sem banana,3425,0,671.68,0.0,29.12,16.8,13.0,-100.0,-18.0,0.0
+Vento (sem quebra-vento),vento sem efeito sobre o café (perda zero),3079,346,659.92,87.39,35.46,16.8,11.0,0.0,0.0,0.0
+Vento (sem quebra-vento),vento forte (perda de 20% sem proteção),3079,346,527.94,87.39,35.46,16.8,-11.0,0.0,0.0,0.0
+Produtividade do café,-30% no pico por planta,3079,346,415.75,87.39,35.46,16.8,-30.0,0.0,0.0,0.0
+Produtividade do café,+30% no pico por planta,3079,346,772.11,87.39,35.46,16.8,30.0,0.0,0.0,0.0
+Recepa do café,a cada 10 anos,3079,346,611.93,87.39,36.72,16.8,3.0,0.0,4.0,0.0
+Recepa do café,a cada 18 anos,3079,346,599.16,87.39,35.77,16.8,1.0,0.0,1.0,0.0

@@ -1,0 +1,26 @@
+{
+ "arquivo": null,
+ "largura_assumida_m": null,
+ "faixa_livre_m": null,
+ "corredor_sem_planta_m": null,
+ "estradas": [],
+ "linhas_x_estrada": null,
+ "logistica": {
+  "dist_media_ponderada_m": null,
+  "dist_max_m": null,
+  "linha_mais_distante": null,
+  "disponivel": false
+ },
+ "resumo": {
+  "estradas": 0,
+  "comprimento_total_m": null,
+  "trechos_agua_ao_longo": null,
+  "agua_ao_longo_m": null,
+  "cruzamentos_de_drenagem": null,
+  "maior_cruzamento_m2": null,
+  "greide_critico_pct": null,
+  "acumulacao_critica_m2": null,
+  "cruzamento_min_m2": null
+ },
+ "status": "indisponível: nenhum vetor de vias fornecido; corredores e logística não calculados"
+}

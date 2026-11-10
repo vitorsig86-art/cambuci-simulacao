@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__NOME__ | Cardeal Map</title>
+
+
+<style>
+:root{
+  /* Layout: cena 3D à esquerda, tempo, camadas e indicadores à direita; empilha no celular */
+  --bg:#eef0ea; --surface:#fbfcf8; --ink:#1d2419; --muted:#5c6656; --line:#d5dacd;
+  --accent:#2f5b2a; --cherry:#a8261c; --water:#1f6fd1; --accent-ink:#ffffff;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"Public Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141812; --surface:#1c2119; --ink:#e7ecdf; --muted:#9aa591; --line:#323a2d;
+  --accent:#8fc27d; --cherry:#e0675c; --water:#6aa8ff; --accent-ink:#10150e; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#141812; --surface:#1c2119; --ink:#e7ecdf; --muted:#9aa591; --line:#323a2d;
+  --accent:#8fc27d; --cherry:#e0675c; --water:#6aa8ff; --accent-ink:#10150e; color-scheme:dark;}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
+header{padding:20px clamp(16px,3vw,32px) 12px;display:grid;gap:10px}
+h1{font:700 clamp(24px,3.2vw,34px)/1.1 var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1 em{font-style:normal;color:var(--cherry)}
+.lede{margin:0;color:var(--muted);max-width:78ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+button{font:500 13.5px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:16px;padding:0 clamp(16px,3vw,32px) 28px}
+@media (max-width:1000px){main{grid-template-columns:1fr}}
+.stage{position:relative;min-height:540px;height:min(74vh,780px);border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#dfe6e9}
+#scene{position:absolute;inset:0}
+.stage .views{position:absolute;top:12px;left:12px;display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100% - 24px)}
+.stage .views button{background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(4px);font-size:12.5px;padding:6px 11px}
+.stage .views button[aria-pressed="true"]{background:var(--ink)}
+.yearbadge{position:absolute;right:16px;bottom:12px;text-align:right;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.yearbadge small{display:block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;opacity:.9}
+.yearbadge b{font:700 54px/1 var(--display)}
+.yearbadge span{display:block;font:500 12px var(--mono);opacity:.9}
+.credit{position:absolute;left:12px;bottom:10px;font:500 11px var(--mono);color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font:500 13px var(--mono)}
+aside{display:grid;gap:14px;align-content:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.card h2{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.timeline{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+#play{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);min-width:84px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.phase{margin:10px 0 0;color:var(--muted);font-size:13.5px}
+.phase b{color:var(--ink)}
+.row2{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;margin-top:10px;font-size:13px;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{border-top:3px solid var(--line);padding-top:6px}
+.tile.key{border-top-color:var(--cherry)}
+.tile b{font:700 24px/1.1 var(--display);font-variant-numeric:tabular-nums;display:block}
+.tile span{font-size:12.5px;color:var(--muted)}
+.state{display:inline-block;font:600 11px var(--mono);padding:2px 7px;border-radius:999px;margin-top:4px}
+.state.ok{background:color-mix(in srgb,#3c8a3a 18%,transparent);color:#3c8a3a}
+.state.warn{background:color-mix(in srgb,#c48a00 20%,transparent);color:#a07000}
+.state.bad{background:color-mix(in srgb,#b3261e 18%,transparent);color:#b3261e}
+select{font:500 13.5px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;width:100%}
+canvas#graph,canvas.graph{width:100%;height:190px;display:block;margin-top:8px}
+.tile.pos b{color:#2f7d32} .tile.neg b{color:var(--cherry)}
+.tile small{display:block;font-size:11.5px;color:var(--muted)}
+.modo{display:flex;gap:6px;margin:4px 0 10px;flex-wrap:wrap}
+h3.sub{font-size:13px;margin:12px 0 4px;color:var(--muted);font-weight:600}
+.barras div{display:grid;grid-template-columns:72px 1fr 92px;gap:6px;align-items:center;font-size:12.5px;margin:3px 0}
+.barras i{display:block;height:9px;border-radius:3px;background:var(--accent)}
+.barras span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+details.sec summary{cursor:pointer;font:600 15px var(--display)}
+.pform{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.pform label{display:flex;flex-direction:column;font-size:13px;gap:2px}
+.pform small{color:var(--muted);font-size:11px}
+.pform input[type=number]{font:inherit;padding:5px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);width:100%;box-sizing:border-box}
+.pform .chk{flex-direction:row;align-items:center;gap:6px;grid-column:1/-1}
+td.neg{color:var(--cherry)} td.pos{color:#2f7d32}
+.dreninfo{position:absolute;left:12px;top:52px;max-width:280px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;line-height:1.4;box-shadow:0 2px 10px rgba(0,0,0,.15);z-index:5}
+details.solp{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+details.solp summary{cursor:pointer;font-weight:600}
+.terleg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);margin-top:8px}
+.terleg i{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.tag{font:600 10.5px var(--mono,monospace);padding:1px 5px;border-radius:4px;border:1px solid var(--line);white-space:nowrap}
+.tag.calc{color:#2f5b2a} .tag.inf{color:#a86a00} .tag.nd{color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:5px 4px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font:600 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+tr.cur td{font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.notes{font-size:13px;color:var(--muted)}
+.notes p{margin:0 0 8px}
+.notes ul{margin:0;padding-left:18px}
+.water b{color:var(--water)}
+.tools{position:absolute;left:12px;bottom:34px;display:flex;gap:6px}
+.tools button{background:color-mix(in srgb,var(--surface) 90%,transparent);font-size:12.5px;padding:6px 11px}
+.tools select{width:auto;font-size:12.5px;border-radius:999px;padding:5px 10px;background:color-mix(in srgb,var(--surface) 90%,transparent)}
+.rleg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);margin-top:8px}
+.rleg i{display:inline-block;width:14px;height:4px;border-radius:2px;margin-right:5px;vertical-align:middle}
+#btTrator[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.hud{position:absolute;left:12px;top:56px;background:color-mix(in srgb,#10150e 78%,transparent);color:#fff;border-radius:10px;padding:8px 12px;font:500 12.5px/1.5 var(--mono)}
+.hud b{font:700 20px var(--display)}
+.hud .ok{color:#8fe08a}.hud .warn{color:#ffd166}.hud .bad{color:#ff7b6e}
+.maplegend{position:absolute;right:12px;top:56px;background:color-mix(in srgb,var(--surface) 92%,transparent);border-radius:10px;padding:8px 10px;font-size:12px;display:grid;gap:3px}
+.maplegend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.metas-in{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:10px}
+.metas-in input{width:70px;font:600 14px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:4px 6px}
+#metas tr{cursor:pointer}
+.chip{display:inline-block;font:600 11px var(--mono);padding:2px 7px;border-radius:999px}
+.chip.ok{background:color-mix(in srgb,#3c8a3a 18%,transparent);color:#3c8a3a}
+.chip.no{background:color-mix(in srgb,#b3261e 14%,transparent);color:#b3261e}
+.mini{font-size:12px;color:var(--muted);margin:8px 0 0}
+footer{padding:0 clamp(16px,3vw,32px) 28px;font-size:12.5px;color:var(--muted)}
+/* celular: cena logo abaixo do título, tempo sobre a cena, um dedo rola a página e dois dedos movem a cena; tela cheia libera um dedo */
+.mtime,.bt-tela,.toque,.mais{display:none}
+@media (max-width:700px){
+  header{padding:14px 14px 8px;gap:8px}
+  h1{font-size:22px}
+  .lede{font-size:14px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+  .lede.aberta{display:block}
+  .mais{display:inline;justify-self:start;border:0;background:none;padding:0;font-size:13px;color:var(--accent);text-decoration:underline}
+  #cenarios{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;margin:0 -14px;padding:2px 14px 4px;scrollbar-width:none}
+  #cenarios::-webkit-scrollbar,.stage .views::-webkit-scrollbar{display:none}
+  #cenarios button{white-space:nowrap;scroll-snap-align:start;flex:none}
+  main{padding:0 10px 20px;gap:12px}
+  .stage{height:66svh;min-height:380px;max-height:640px;border-radius:12px}
+  .stage .views{flex-wrap:nowrap;overflow-x:auto;top:8px;left:8px;max-width:calc(100% - 58px);scrollbar-width:none}
+  .stage .views button{white-space:nowrap;flex:none;font-size:12px;padding:5px 10px}
+  .credit{display:none}
+  .yearbadge,#trecho{display:none}
+  .tools{left:8px;bottom:60px;flex-wrap:nowrap}
+  .tools button,.tools select{font-size:12px;padding:5px 9px}
+  .hud{left:8px;top:46px;font-size:10.5px;line-height:1.4;padding:6px 9px;max-width:calc(100% - 142px)}
+  .hud b{font-size:15px}
+  .maplegend{right:8px;top:46px;font-size:10.5px;padding:6px 8px;max-width:126px;gap:2px;line-height:1.25}
+  .maplegend i{width:10px;height:10px;margin-right:4px}
+  .mtime{display:flex;position:absolute;left:8px;right:8px;bottom:8px;align-items:center;gap:10px;padding:5px 12px 5px 5px;border-radius:999px;background:color-mix(in srgb,var(--surface) 90%,transparent);backdrop-filter:blur(4px)}
+  .mtime button{width:38px;height:38px;padding:0;flex:none;background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-size:14px}
+  .mtime input{flex:1;margin:0}
+  .mtime span{font:600 12px var(--mono);min-width:34px;text-align:right}
+  .bt-tela{display:block;position:absolute;top:8px;right:8px;width:38px;height:34px;padding:0;font-size:17px;line-height:1;background:color-mix(in srgb,var(--surface) 90%,transparent)}
+  .toque{display:grid;place-items:center;position:absolute;inset:0;pointer-events:none;background:rgba(16,21,14,.45);color:#fff;font:600 15px var(--body);text-align:center;padding:24px;opacity:0;transition:opacity .25s}
+  .toque.on{opacity:1}
+  .stage.cheia{position:fixed;inset:0;height:100dvh;max-height:none;min-height:0;border-radius:0;border:0;z-index:50}
+  .card{padding:12px 14px}
+  table{font-size:12.5px}
+  th,td{padding:5px 3px}
+}
+/* ---------- implantação (template_imp) ---------- */
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.seletores{display:flex;flex-wrap:wrap;gap:8px 22px}
+.chips .rot{font:600 11.5px var(--mono);color:var(--muted);align-self:center;text-transform:uppercase;letter-spacing:.05em}
+#dv td.n,#dv th{white-space:nowrap}
+#dv .sel{font-weight:700;color:var(--ink)}
+.faixa{display:block;font:500 11.5px var(--mono);color:var(--muted);margin-top:2px}
+.aviso{font-size:12.5px;color:var(--muted);border-left:3px solid var(--cherry);padding:4px 0 4px 10px;margin:0}
+.gleg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);margin-top:6px}
+.gleg i{display:inline-block;width:14px;height:8px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.prem td{text-align:left;vertical-align:top}
+.prem td.n{text-align:right;white-space:nowrap}
+.prem .conf{font:600 10.5px var(--mono);padding:1px 6px;border-radius:999px}
+.prem .conf.alta{background:color-mix(in srgb,#3c8a3a 18%,transparent);color:#3c8a3a}
+.prem .conf.media{background:color-mix(in srgb,#c48a00 20%,transparent);color:#a07000}
+.prem .conf.baixa{background:color-mix(in srgb,#b3261e 16%,transparent);color:#b3261e}
+.tablewrap{max-height:420px;overflow:auto}
+.est{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;font-size:12px;color:var(--muted);text-align:center}
+.est b{display:block;font:700 18px var(--display);color:var(--ink)}
+</style>
+</head>
+<body>
+<header>
+  <h1>__TITULO__</h1>
+  <p class="lede" id="lede"></p>
+  <button class="mais" id="leMais" type="button" hidden>ler mais</button>
+  <div class="seletores">
+    <div class="chips" id="desenhos" role="group" aria-label="Desenho"><span class="rot">Desenho</span></div>
+    <div class="chips" id="cenarios" role="group" aria-label="Cenário"><span class="rot">Cenário</span></div>
+  </div>
+</header>
+<p style="margin:0 3vw 14px;padding:12px;border:1px solid #b39a42;border-radius:8px"><b>HIPÓTESE demonstrativa · Cambuci</b> — território medido; café, banana, grevílea e uso anterior hipotético a validar. Sombra 3D é visual; produção usa sobreposição de copas simuladas; insolação usa apenas o relevo; drenagem é estática. Valores em R$ constantes de 2026.</p><main>
+  <section class="stage" aria-label="Vista 3D da área">
+    <div id="scene"></div>
+    <div class="loading" id="loading">montando o terreno…</div>
+    <div class="views" role="group" aria-label="Ponto de vista">
+      <button data-vue="geral" aria-pressed="true">Visão geral</button>
+      <button data-vue="cima" aria-pressed="false">De cima</button>
+      <button data-vue="pe" aria-pressed="false">Entre as linhas</button>
+    </div>
+    <div class="credit">Cardeal Map · levantamento por drone</div>
+    <div class="maplegend" id="mapLeg"></div>
+    <div class="dreninfo" id="drenInfo" hidden></div>
+    <div class="yearbadge"><small>ano</small><b id="anoBig">0</b><span id="anoCal"></span></div>
+    <div class="mtime" role="group" aria-label="Tempo"><button id="mPlay" type="button" aria-label="Passar os anos">▶</button><input id="mAno" type="range" min="0" max="30" step="1" value="0" aria-label="Ano da simulação"><span id="mAnoTxt">ano 0</span></div>
+    <button class="bt-tela" id="btTela" type="button" aria-pressed="false" aria-label="Tela cheia" title="Tela cheia">⤢</button>
+    <div class="toque" id="toque">Use dois dedos para girar e dar zoom, ou toque em ⤢ para explorar em tela cheia</div>
+  </section>
+  <aside>
+    <div class="card">
+      <h2>Tempo</h2>
+      <div class="timeline">
+        <button id="play" type="button">▶ Passar</button>
+        <input id="ano" type="range" min="0" max="30" step="1" value="0" aria-label="Ano da simulação">
+      </div>
+      <p class="phase" id="fase"></p>
+      <div class="row2">
+        <span>Linhas</span><button id="btLinhas" type="button" aria-pressed="true" style="justify-self:start">Ocultar linhas de cultivo</button>
+        <span>Drenagem</span><button id="btDren" type="button" aria-pressed="false" style="justify-self:start">Mostrar drenagem</button>
+        <span id="lbQV">Quebra-vento</span><button id="btQV" type="button" aria-pressed="true" style="justify-self:start">Ocultar quebra-vento e faixa protegida</button>
+        <span>Copas preservadas</span><button id="btCopas" type="button" aria-pressed="false">Mostrar exclusões</button>
+        <span>Estradas</span><button id="btEst" type="button" aria-pressed="true" style="justify-self:start">Ocultar estradas</button>
+        <span>Entorno</span><button id="btEnt" type="button" aria-pressed="true" style="justify-self:start">Ocultar árvores do entorno</button>
+        <label for="camCor">Copas</label>
+        <select id="camCor"><option value="nat">cores naturais</option><option value="esp">uma cor por espécie</option></select>
+      </div>
+      <details class="solp" id="solPainel">
+        <summary>Sol e sombra · ativar sombras visuais</summary>
+        <div class="row2" style="margin-top:8px">
+          <label for="solData">Data</label>
+          <select id="solData"><option value="12-21">solstício de verão (21/12)</option><option value="06-21" selected>solstício de inverno (21/06)</option><option value="03-20">equinócio (20/03)</option><option value="livre">data livre</option></select>
+          <span class="solLivre" hidden>Dia</span><input class="solLivre" id="solDia" type="date" hidden>
+          <label for="solHora">Hora solar local</label><div><input id="solHora" type="range" min="6" max="18" value="12" step="0.25" aria-label="Hora solar local"><span id="solHoraTxt"></span></div>
+        </div>
+        <p class="mini" id="solInfo"></p>
+      </details>
+    </div>
+    <div class="tabs" role="tablist">
+      <button type="button" data-aba="ind" aria-pressed="true">Indicadores</button>
+      <button type="button" data-aba="terreno" aria-pressed="false">Terreno e análise</button>
+      <button type="button" data-aba="hoje" aria-pressed="false">Diagnóstico e plantio</button>
+      <button type="button" data-aba="prem" aria-pressed="false">Premissas e fontes</button>
+    </div>
+    <div data-painel="ind">
+      <div class="card">
+        <h2 id="dvTitulo">Com e sem quebra-vento</h2>
+        <div class="tablewrap"><table id="dv"></table></div>
+        <p class="mini" id="dvTxt"></p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2 id="indTitulo">Rentabilidade</h2>
+        <div class="modo" role="group" aria-label="Mão de obra própria">
+          <button type="button" id="moCom" aria-pressed="true">com mão de obra própria</button><button type="button" id="moSem" aria-pressed="false">sem pró-labore</button>
+        </div>
+        <div class="tiles" id="tiles"></div>
+        <h3 class="sub">Receita por cultura no ano</h3>
+        <div class="barras" id="culturas"></div>
+        <p class="mini">Número grande: cenário escolhido, em R$ de 2026 (sem inflação). Abaixo: faixa do conservador ao otimista, que variam produção, preço e custo juntos. Estimativa de modelagem, sem validação de campo.</p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Resultado acumulado desde o plantio</h2>
+        <canvas id="graph" aria-label="Resultado acumulado por cenário desde o ano do plantio"></canvas>
+        <div class="gleg" id="gleg"></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2 id="cmpTitulo">Cenários</h2>
+        <div class="tablewrap"><table id="cmp"></table></div>
+      </div>
+      <details class="card sec" style="margin-top:14px">
+        <summary>Carbono e plantas (secundário)</summary>
+        <div class="tiles" id="tilesC" style="margin-top:10px"></div>
+        <div class="est" id="estratos"></div>
+        <select id="indSel" aria-label="Indicador do gráfico de carbono" style="margin-top:10px">
+          <option value="co2e_total">Carbono estocado na biomassa e serapilheira (t CO2e)</option>
+          <option value="co2e_liquido">Estoque líquido, descontada a pastagem (t CO2e)</option>
+          <option value="seq_co2e">Sequestro líquido do ano (t CO2e)</option>
+          <option value="solo_acum">Ganho de carbono no solo (t CO2e, baixa confiança)</option>
+          <option value="cobertura">Cobertura de copa (%)</option>
+        </select>
+        <canvas id="graphC" class="graph" aria-label="Gráfico do indicador de carbono"></canvas>
+        <div class="gleg" id="glegC"></div>
+        <p class="mini">Não equivale a certificação de créditos de carbono. Solo: baixa confiança.</p>
+      </details>
+    </div>
+    <div data-painel="terreno" hidden>
+      <div class="card">
+        <h2>Terreno e análise</h2>
+        <div class="row2">
+          <label for="camBase">Mapa</label>
+          <select id="camBase"><option value="orto">ortomosaico</option><option value="decl">declividade</option><option value="agua">umidade relativa (TWI)</option><option value="acum">acumulação de fluxo</option><option value="cobertura">cobertura (MDS − MDT)</option><option value="face">face da encosta</option><option value="sol">sol de inverno</option></select>
+        </div>
+        <div class="terleg" id="terLeg"></div>
+        <table id="tabTerreno" style="margin-top:10px"></table>
+        <h3 class="sub">Água: drenagem simulada no MDT</h3>
+        <table id="tabAgua"></table>
+        <p class="mini">Ligue a camada <b>Drenagem</b> no painel Tempo: trechos em azul (mais grossos com mais ordem e área), divisor da bacia em ciano tracejado, concentração em ciano, entradas em roxo, saídas em azul escuro, linhas de cultivo que conduzem fluxo em laranja, risco indicativo em vermelho, Vias indisponíveis. Toque num trecho para ver área e ordem. Derivado do MDT fotogramétrico (erro sob copa), sem calibração com chuva ou vazão, bacia limitada ao recorte do voo.</p>
+        <p class="mini"><span class="tag calc">calculado</span> obtido do MDT ou do MDS. <span class="tag inf">inferência</span> interpretação do relevo, a conferir em campo. Clima local indisponível; aptidão não avaliada.</p>
+        <p class="mini"><span class="tag nd">não determinado</span> Cursos d'água, nascentes, APP, tipo e drenagem do solo não estão nos dados e não foram inferidos.</p>
+      </div>
+    </div>
+    <div data-painel="hoje" hidden>
+      <div class="card notes">
+        <h2>Diagnóstico e desenho do plantio</h2>
+        <table id="hojeTab"></table>
+        <p class="mini" id="hojeTxt"></p>
+        <h3 class="sub" id="qvH">Quebra-vento: faixa protegida e competição</h3>
+        <table id="qvTab"></table>
+        <p class="mini" id="qvTxt"></p>
+        <h3 class="sub">Estradas</h3>
+        <table id="estTab"></table>
+        <p class="mini" id="estTxt"></p>
+      </div>
+    </div>
+    <div data-painel="prem" hidden>
+      <div class="card">
+        <h2>Premissas econômicas (editáveis)</h2>
+        <form id="premForm" class="pform" onsubmit="return false">
+          <label>Preço do café <small>R$/saca 60 kg</small><input type="number" inputmode="decimal" step="10" min="0" id="u_preco_cafe"></label>
+          <label>Preço da banana <small>R$/kg</small><input type="number" inputmode="decimal" step="0.05" min="0" id="u_preco_banana"></label>
+          <label>Implantação <small>R$/ha, insumos e serviços</small><input type="number" inputmode="decimal" step="100" min="0" id="u_impl_ha"></label>
+          <label>Custeio anual <small>R$/ha, insumos e serviços</small><input type="number" inputmode="decimal" step="50" min="0" id="u_custeio_ha"></label>
+          <label>Dia de trabalho <small>R$/dia-homem</small><input type="number" inputmode="decimal" step="5" min="0" id="u_diaria"></label>
+          <label>Taxa de desconto <small>% a.a. real</small><input type="number" inputmode="decimal" step="0.5" min="0" max="50" id="u_taxa"></label>
+          <label class="chk"><input type="checkbox" id="u_mo_propria"> Valorizar a mão de obra própria (pró-labore)</label>
+        </form>
+        <div class="row2" style="margin-top:8px"><button type="button" id="premReset">Restaurar padrão</button><span class="mini" id="premAviso"></span></div>
+        <p class="mini">Os campos mudam o provável; conservador e otimista andam na mesma proporção. Densidade de plantio e demais parâmetros ficam em projeto.yaml e nos arquivos de parâmetros (rodar o pipeline de novo).</p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Ano de retorno: o que mais pesa</h2>
+        <div class="tablewrap"><table id="sensEcon" class="prem"></table></div>
+        <p class="mini">Um fator por vez sobre o provável, com as premissas editadas acima.</p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Preços e custos: fonte e confiança</h2>
+        <div class="tablewrap"><table id="premEcon" class="prem"></table></div>
+        <p class="mini">"premissa a validar" = sem fonte verificável. Valores conservador · provável · otimista.</p>
+      </div>
+      <div class="card notes" style="margin-top:14px">
+        <h2>Como ler</h2>
+        <p class="aviso">Estimativas de modelagem, sem validação de campo. Não equivalem a certificação de créditos de carbono.</p>
+        <ul id="metodo" style="margin-top:8px"></ul>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Produção e carbono: quanto cada desenho muda</h2>
+        <div class="tablewrap"><table id="sensTab" class="prem"></table></div>
+        <p class="mini">Variação contra o cenário provável. Café e banana = total colhido em 30 anos. Carbono = biomassa e serapilheira no ano 30.</p>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h2>Parâmetros (conservador · provável · otimista)</h2>
+        <div class="tablewrap"><table id="premTab" class="prem"></table></div>
+      </div>
+    </div>
+  </aside>
+</main>
+<footer id="rodape"></footer>
+
+<script id="site" type="application/json">__SITE__</script>
+<script id="orto" type="text/plain">__ORTO__</script>
+<script>__ECONOMIA_JS__</script>
+<script>
+window.__erroCambuci=function(message){const e=document.getElementById('loading');if(!e)return;e.style.padding='24px';e.style.textAlign='center';e.style.whiteSpace='pre-line';e.textContent=message;};
+window.addEventListener('error',e=>window.__erroCambuci(location.protocol==='file:'?'Abra o site por HTTP. No PowerShell, na pasta cambuci_implantacao, execute .\qpy.bat -m http.server 8090 --bind 127.0.0.1 --directory site e visite http://127.0.0.1:8090/':('Falha ao montar a cena: '+(e.message||'erro de módulo, WebGL ou imagem'))));
+window.addEventListener('unhandledrejection',e=>window.__erroCambuci('Falha ao montar a cena: '+String(e.reason)));
+if(location.protocol==='file:')window.__erroCambuci('Este site usa módulos locais do Three.js e precisa ser servido por HTTP.\n\nNo PowerShell, na pasta cambuci_implantacao, execute:\n.\\qpy.bat -m http.server 8090 --bind 127.0.0.1 --directory site\n\nDepois visite http://127.0.0.1:8090/');
+setTimeout(()=>{const e=document.getElementById('loading');if(e&&e.textContent.startsWith('montando'))window.__erroCambuci('A montagem do terreno excedeu 30 segundos. Confira WebGL e memória do navegador. Consulte erros no console.');},30000);
+</script>
+<script type="importmap">{"imports": {"three": "./vendor/three.module.js", "three/addons/controls/OrbitControls.js": "./vendor/OrbitControls.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const S = JSON.parse(document.getElementById('site').textContent);
+const CFG=S.cfg, W=S.W, HH=S.H, MO0=S.modelo, ANOS=MO0.anos, ANO0=MO0.ano0, AREA_HA=MO0.area_ha;
+const $=id=>document.getElementById(id);
+const fmt=(v,d=0)=>(v==null||isNaN(v))?'–':v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+
+/* ---------- dados ---------- */
+const CEN=[{id:'conservador',nome:'Conservador',bit:1,cor:'#9aa18f'},{id:'provavel',nome:'Provável',bit:2,cor:'#2f5b2a'},{id:'otimista',nome:'Otimista',bit:4,cor:'#3a78c2'}];
+const ESP=[{id:'grevilea',nome:'Grevílea (quebra-vento)',curto:'grevílea',nat:'#5d7f4a',cat:'#00a86b'},{id:'banana',nome:'Bananeira',curto:'banana',nat:'#7fa83a',cat:'#e0c12a'},
+  {id:'cafe',nome:'Café arábica',curto:'café',nat:'#2d5a27',cat:'#a8261c'}];
+const EST=S.estradas, QV=MO0.qv, NIVC={conservador:'c',provavel:'p',otimista:'o'};
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+// dois desenhos no mesmo site: com quebra-vento (renque de grevílea) e sem (café e banana nas linhas inteiras). Cada um tem plantas, séries e contagens próprias
+const DES=[{id:'com',nome:'com quebra-vento'},{id:'sem',nome:'sem quebra-vento'}], DD={};
+for(const d of DES){ const M=ECON.desenho(MO0,d.id), ar={};
+  for(const c of CEN){ const m=M.cen[c.id]; ar[c.id]={V:b64(m.V),H:b64(m.H),R:b64(m.R),F:b64(m.F),ind:m.ind}; for(const I of m.ind) I.solo_acum=I.c_solo_ganho*44/12; }
+  DD[d.id]={MO:M,NP:M.n,PLT:M.plantas,AR:ar}; }   // PLT: [x, y, espécie, membro, linha]
+let des=DD[CFG.desenho_inicial]?CFG.desenho_inicial:'sem', MO=DD[des].MO, NP=DD[des].NP, PLT=DD[des].PLT, AR=DD[des].AR, PZ=null;
+const IND=id=>AR[id].ind, OUTRO=()=>des==='com'?'sem':'com';
+
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const RES=S.terrain.res, NX=S.terrain.nx, NY=S.terrain.ny, TZ=new Uint16Array(b64(S.terrain.b64).buffer);
+function zAt(x,y){ const c=clamp(x/RES-.5,0,NX-1.001), r=clamp((HH-y)/RES-.5,0,NY-1.001), c0=c|0, r0=r|0, fc=c-c0, fr=r-r0, g=(rr,cc)=>TZ[rr*NX+cc]/100;
+  return (g(r0,c0)*(1-fc)+g(r0,c0+1)*fc)*(1-fr)+(g(r0+1,c0)*(1-fc)+g(r0+1,c0+1)*fc)*fr; }
+const PER=S.perimetro, REC=S.recorte;
+for(const d of DES){ const D=DD[d.id]; D.PZ=new Float32Array(D.NP); for(let i=0;i<D.NP;i++) D.PZ[i]=zAt(D.PLT[i][0],D.PLT[i][1]); } PZ=DD[des].PZ;
+
+/* ---------- cena ---------- */
+const box=$('scene'); let renderer;
+try{ renderer=new THREE.WebGLRenderer({antialias:true}); }catch(e){ $('loading').textContent='WebGL indisponível neste navegador.'; throw e; }
+const TOQUE=matchMedia('(pointer:coarse)').matches;
+const gl=renderer.getContext(), dbg=gl.getExtension('WEBGL_debug_renderer_info'), gpu=dbg?gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER);
+const LEVE=TOQUE||/swiftshader|llvmpipe|software/i.test(gpu); // medição de QA: software saturou no detalhe desktop
+
+renderer.setPixelRatio(Math.min(devicePixelRatio,LEVE?1.5:2)); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace;
+box.appendChild(renderer.domElement);
+const scene=new THREE.Scene(); scene.background=new THREE.Color('#dfe6e9'); scene.fog=new THREE.Fog('#dfe6e9',Math.max(W,HH)*0.95,Math.max(W,HH)*2.25);
+const camera=new THREE.PerspectiveCamera(40,1,0.1,2000);
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true; controls.dampingFactor=0.08; controls.maxPolarAngle=Math.PI/2.05; controls.minDistance=4; controls.zoomToCursor=true; controls.zoomSpeed=2; controls.mouseButtons={LEFT:THREE.MOUSE.ROTATE,MIDDLE:THREE.MOUSE.PAN,RIGHT:THREE.MOUSE.PAN}; controls.maxDistance=Math.max(200,Math.max(W,HH)*3);
+const DMAX=Math.max(W,HH);
+function ajustaNevoa(){ const d=camera.position.distanceTo(controls.target); scene.fog.near=Math.max(DMAX*0.95,d+DMAX*0.6); scene.fog.far=Math.max(DMAX*2.25,d+DMAX*2.2); }
+function chaoCamera(){ const c=camera.position, x=c.x+W/2, y=HH/2-c.z; if(x<0||x>W||y<0||y>HH) return; const zmin=zAt(x,y)+1.6; if(c.y<zmin){ c.y=zmin; } }
+let sujo=true; controls.addEventListener('change',()=>{ chaoCamera(); ajustaNevoa(); sujo=true; });
+const P=(x,y,z)=>new THREE.Vector3(x-W/2,z,-(y-HH/2));
+scene.add(new THREE.HemisphereLight('#f2f6ff','#5b6b3a',0.75));
+const sun=new THREE.DirectionalLight('#fff3dd',1.9);
+sun.position.copy(P(W/2+60,HH/2+120,150)); sun.target.position.copy(P(W/2,HH/2,10));
+sun.castShadow=true; sun.shadow.mapSize.set(LEVE?1024:4096,LEVE?1024:4096); sun.shadow.bias=-0.0004; sun.shadow.normalBias=0.04;
+Object.assign(sun.shadow.camera,{left:-(W/2+20),right:W/2+20,top:HH/2+20,bottom:-(HH/2+20),near:1,far:sun.position.distanceTo(sun.target.position)+Math.max(W,HH)*1.3}); scene.add(sun,sun.target);
+
+function drape(coords,dz,step=1){ const pts=[]; for(let i=0;i<coords.length-1;i++){ const [x0,y0]=coords[i],[x1,y1]=coords[i+1], n=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0)/step));
+  for(let t=0;t<n;t++){ const x=x0+(x1-x0)*t/n, y=y0+(y1-y0)*t/n; pts.push(P(x,y,zAt(x,y)+dz)); } } const l=coords.at(-1); pts.push(P(l[0],l[1],zAt(l[0],l[1])+dz)); return pts; }
+const TERR={};
+// terreno: MDT no recorte inteiro (o MDS não vira malha); entorno em árvores 3D, sem corte no limite da área
+{ const g=new THREE.BufferGeometry(), pos=new Float32Array(NX*NY*3), uv=new Float32Array(NX*NY*2), idx=[];
+  for(let r=0;r<NY;r++)for(let c=0;c<NX;c++){ const x=(c+.5)*RES,y=HH-(r+.5)*RES,k=r*NX+c,v=P(x,y,TZ[k]/100); pos.set([v.x,v.y,v.z],k*3); uv.set([x/W,y/HH],k*2);
+    if(r<NY-1&&c<NX-1){const a=k,b=k+1,d=k+NX,e=k+NX+1; idx.push(a,d,b,b,d,e);} }
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3)); g.setAttribute('uv',new THREE.BufferAttribute(uv,2)); g.setIndex(new THREE.BufferAttribute(new Uint32Array(idx),1)); g.computeVertexNormals();
+  const img=new Image(), tex=new THREE.Texture(img); tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+  img.onload=()=>{tex.needsUpdate=true; sujo=true; $('loading').remove();}; img.onerror=()=>window.__erroCambuci('Não foi possível decodificar a textura do terreno. Confira se site/index.html está íntegro.'); img.src='data:image/jpeg;base64,'+document.getElementById('orto').textContent.trim();
+  const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({map:tex,roughness:1,metalness:0})); m.receiveShadow=true; scene.add(m); TERR.mat=m.material; TERR.orto=tex; TERR.mesh=m;
+  // paredes na borda do recorte
+  const borda=[[RES/2,RES/2],[W-RES/2,RES/2],[W-RES/2,HH-RES/2],[RES/2,HH-RES/2],[RES/2,RES/2]];
+  const wpos=[],widx=[]; const pp=drape(borda,0,0.5);
+  pp.forEach((v,i)=>{ wpos.push(v.x,v.y,v.z,v.x,-4,v.z); if(i){const a=(i-1)*2; widx.push(a,a+1,a+2,a+1,a+3,a+2);} });
+  const wg=new THREE.BufferGeometry(); wg.setAttribute('position',new THREE.Float32BufferAttribute(wpos,3)); wg.setIndex(widx); wg.computeVertexNormals();
+  scene.add(new THREE.Mesh(wg,new THREE.MeshStandardMaterial({color:'#7a5b3c',roughness:1,side:THREE.DoubleSide}))); }
+scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(drape(PER,0.2,0.5)),new THREE.LineBasicMaterial({color:'#f4d03f'})));
+// linhas de cultivo desenhadas pelo usuário (botão mostra/oculta)
+const grpLinhas=new THREE.Group(); scene.add(grpLinhas);
+for(const l of MO.linhas) grpLinhas.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(drape(l,0.12,0.5)),new THREE.LineBasicMaterial({color:'#ffffff',transparent:true,opacity:.85})));
+
+const grpCopas=new THREE.Group();scene.add(grpCopas);grpCopas.visible=false;
+for(const ring of S.copas_exclusao){grpCopas.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(drape(ring,.22,.5)),new THREE.LineBasicMaterial({color:'#00e676'})));}
+$('btCopas').onclick=()=>{grpCopas.visible=!grpCopas.visible;$('btCopas').setAttribute('aria-pressed',grpCopas.visible);$('btCopas').textContent=grpCopas.visible?'Ocultar exclusões':'Mostrar exclusões';sujo=true;};
+/* ---------- peças instanciadas (mesmas do template4) ---------- */
+function tufo(seed,det=1){ const g=new THREE.IcosahedronGeometry(1,det),p=g.attributes.position,r=mulberry(seed),cache={};
+  for(let i=0;i<p.count;i++){const key=[p.getX(i),p.getY(i),p.getZ(i)].map(v=>v.toFixed(3)).join(); if(!(key in cache)) cache[key]=0.82+r()*0.3; const f=cache[key]; p.setXYZ(i,p.getX(i)*f,p.getY(i)*f,p.getZ(i)*f);}
+  g.computeVertexNormals(); return g; }
+const cil=(rt,rb,s)=>{const g=new THREE.CylinderGeometry(rt,rb,1,s,1);g.translate(0,.5,0);return g;};
+/* ---------- bananeira: geometrias compartilhadas (uma por peça; cada planta só acrescenta instâncias) ---------- */
+const geoCor=(pos,col,idx)=>{ const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.setAttribute('color',new THREE.Float32BufferAttribute(col,3)); if(idx) g.setIndex(idx); g.computeVertexNormals(); return g; };
+const linCor=h=>{ const c=new THREE.Color(h); return [c.r,c.g,c.b]; };
+// folha: comprimento 1. Nasce em pé (eixo +Y), arqueia para +Z e termina com a ponta caída. Pecíolo, limbo largo em calha,
+// nervura central clara e rasgos nas bordas (o limbo é cortado em lóbulos que se afastam e caem um pouco).
+// f0 = inclinação na base, arco = quanto arqueia, queda = quanto a ponta cai (radianos), nr = rasgos por lado.
+function folhaBanana(seed,f0,arco,queda,nr){
+  const r=mulberry(seed), PEC=0.14, HW=0.155, NS=13, NF=64, pos=[], col=[], idx=[];
+  const fi=t=>f0+arco*Math.pow(t,1.2)+queda*Math.pow(clamp((t-.55)/.45,0,1),2), sy=[0], sz=[0];
+  for(let k=1;k<=NF;k++){ const f=fi((k-.5)/NF); sy.push(sy[k-1]+Math.cos(f)/NF); sz.push(sz[k-1]+Math.sin(f)/NF); }
+  const esp=t=>{ const q=clamp(t,0,1)*NF, k=Math.min(NF-1,Math.floor(q)), a=q-k, f=fi(clamp(t,0,1)); return [sy[k]*(1-a)+sy[k+1]*a, sz[k]*(1-a)+sz[k+1]*a, Math.sin(f), -Math.cos(f)]; };   // y, z e a normal da face de cima
+  const larg=s=>HW*Math.pow(Math.min(1,s/0.09),0.55)*(s<0.7?1:Math.sqrt(Math.max(0,1-((s-0.7)/0.3)**2)))*(0.9+0.1*Math.sin(Math.PI*s));
+  const US=[0,0.5,1];
+  for(const sd of [-1,1]){
+    const rasgo={}; let g=0; while(g<nr){ const j=3+Math.floor(r()*(NS-4)); if(rasgo[j]||rasgo[j-1]||rasgo[j+1]) { if(r()<0.2) g++; continue; } rasgo[j]={u0:0.1+r()*0.45, d:0.008+r()*0.011}; g++; }
+    let cai=r()*0.03, ant=-1, fase=r()*6.283;
+    const fila=(j,desl,u0)=>{ const s=1-Math.pow(1-j/NS,1.35), t=PEC+(1-PEC)*s, w=larg(s), n0=pos.length/3;
+      for(const u of US){ const rp=u0==null?0:clamp((u-u0)/(1-u0),0,1), e=esp(t+desl*rp), h=w*u*(0.34*(1-s)-0.32*s*u)-cai*u*u*(0.4+s)+0.010*Math.sin(j*1.9+fase)*u*u;
+        pos.push(sd*u*w, e[0]+e[2]*h, e[1]+e[3]*h); const k=1-0.16*u; col.push(k*(1+0.22*rp), k*(1-0.04*rp), k*(1-0.45*rp)); }   // borda um pouco mais escura; beira do rasgo amarelada
+      return n0; };
+    const liga=(a,b)=>{ for(let c=0;c<US.length-1;c++) idx.push(a+c,b+c,a+c+1, a+c+1,b+c,b+c+1); };
+    for(let j=0;j<=NS;j++){ const R=rasgo[j];
+      if(R){ const a=fila(j,-R.d,R.u0); if(ant>=0) liga(ant,a); cai=r()*0.045; ant=fila(j,R.d,R.u0); }
+      else { const a=fila(j,0,null); if(ant>=0) liga(ant,a); ant=a; } } }
+  // pecíolo e nervura central: prisma de 3 faces, claro, um pouco acima do limbo e saliente por baixo
+  const NM=11; for(let m=0;m<=NM;m++){ const t=m/NM*0.975, e=esp(t), wm=0.021*(1-t)+0.003, hc=0.005, hb=-wm*1.4, c=t<PEC?[1.25,1.3,1.0]:[1.6,1.5,1.05];
+    pos.push(-wm,e[0]+e[2]*hc,e[1]+e[3]*hc, wm,e[0]+e[2]*hc,e[1]+e[3]*hc, 0,e[0]+e[2]*hb,e[1]+e[3]*hb); col.push(...c,...c,c[0]*.8,c[1]*.8,c[2]*.8);
+    if(m){ const b=pos.length/3-3, a=b-3; for(const [p,q] of [[0,1],[1,2],[2,0]]) idx.push(a+p,b+p,a+q, a+q,b+p,b+q); } }
+  return geoCor(pos,col,idx); }
+// pseudocaule: altura 1, base larga, afina para cima e abre um pouco onde saem os pecíolos; bainhas pardas embaixo e verdes em cima
+const estipeBanana=(()=>{ const PR=[[1.14,0],[1.0,.05],[.93,.22],[.84,.46],[.74,.7],[.64,.9],[.72,1]], NR=8, pos=[], col=[], idx=[], r=mulberry(91);
+  PR.forEach(([rad,y],a)=>{ for(let k=0;k<NR;k++){ const th=k/NR*6.2832, m=r(), e=Math.pow(y,0.7), man=(m<0.3&&y<0.75)?0.62:1, v=0.85+0.25*r();
+      pos.push(Math.cos(th)*rad,y,Math.sin(th)*rad); col.push((0.86+0.14*e)*man*v,(0.66+0.42*e)*man*v,(0.52+0.30*e)*man*v);
+      if(a){ const p=(a-1)*NR+k, q=(a-1)*NR+(k+1)%NR; idx.push(p,p+NR,q, q,p+NR,q+NR); } } });
+  return geoCor(pos,col,idx); })();
+// cacho (uma peça): engaço que sai do topo do pseudocaule, arqueia para +Z e desce; ráquis nua e coração roxo na ponta.
+// As pencas são instâncias à parte, presas ao trecho quase vertical (zCacho dá o afastamento do eixo em cada altura).
+const CACHO_Y0=-0.17, CACHO_DY=0.09, CACHO_FIM=-1.10, zCacho=y=>0.50+0.05*clamp((-y-0.1)/0.8,0,1.2);
+const cachoBanana=(()=>{ const pts=[[0,-.12,0],[0,.10,.04],[0,.21,.20],[0,.14,.40],[0,-.10,.50],[0,-.50,.525],[0,-.95,.55],[0,CACHO_FIM,.556]].map(p=>new THREE.Vector3(...p));
+  const pinta=(g,fn)=>{ const p=g.attributes.position, c=[]; for(let i=0;i<p.count;i++) c.push(...fn(p.getY(i))); g.setAttribute('color',new THREE.Float32BufferAttribute(c,3)); return g.toNonIndexed(); };
+  const ve=linCor('#7d8f3a'), ro=linCor('#6a2148'), ro2=linCor('#8a3358');
+  const tubo=pinta(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),18,0.026,6,false),()=>ve);
+  const cor=new THREE.LatheGeometry([[0.001,0.01],[.05,-.03],[.078,-.10],[.062,-.19],[.026,-.26],[0.001,-.29]].map(p=>new THREE.Vector2(...p)),7); cor.translate(0,CACHO_FIM,.556);
+  const cora=pinta(cor,y=>{ const a=clamp((CACHO_FIM-y)/0.29,0,1); return ro.map((v,k)=>v*(1-a)+ro2[k]*a); });
+  const g=new THREE.BufferGeometry(); for(const n of ['position','normal','color']) g.setAttribute(n,new THREE.Float32BufferAttribute([...tubo.attributes[n].array,...cora.attributes[n].array],3)); return g; })();
+// penca: roda de bananas individuais em volta da ráquis (eixo Y), em duas fileiras alternadas; cada banana sai para fora e curva para cima
+function pencaBanana(nb){ const pos=[], col=[], idx=[], NL=5, SS=[0,.18,.48,.8,.94,1], RR=[.008,.018,.0245,.0235,.0125,.0045], r=mulberry(57);
+  for(let b=0;b<nb;b++){ const par=b%2, th=(b+(r()-.5)*.35)/nb*6.2832, ct=Math.cos(th), st=Math.sin(th), L=(par?0.175:0.19)*(0.93+r()*0.14), a0=par?-0.45:-0.12, a1=par?1.15:1.32;
+    let ro=0.028, y=par?-0.012:0.012, sa=0; const n0=pos.length/3;
+    SS.forEach((s,k)=>{ const N=6; for(let q=0;q<N;q++){ const sm=sa+(s-sa)*(q+.5)/N, a=a0+(a1-a0)*sm; ro+=Math.cos(a)*(s-sa)*L/N; y+=Math.sin(a)*(s-sa)*L/N; } sa=s;
+      const a=a0+(a1-a0)*s, n1r=-Math.sin(a), n1y=Math.cos(a), cc=s<0.1?[.62,.72,.42]:(s>0.97?[.22,.17,.09]:(s>0.9?[.7,.7,.4]:[1,1,1]));
+      for(let q=0;q<NL;q++){ const ps=q/NL*6.2832, c=Math.cos(ps)*RR[k], t=Math.sin(ps)*RR[k], rr=ro+n1r*c; pos.push(ct*rr-st*t, y+n1y*c, st*rr+ct*t); col.push(...cc);
+        if(k){ const p=n0+(k-1)*NL+q, p2=n0+(k-1)*NL+(q+1)%NL; idx.push(p,p+NL,p2, p2,p+NL,p2+NL); } } }); }
+  return geoCor(pos,col,idx); }
+const mat=(o={})=>new THREE.MeshStandardMaterial({color:'#ffffff',roughness:.85,metalness:0,...o});
+const POOL={};
+function pool(nome,geo,material,max,sombra=true){ const m=new THREE.InstancedMesh(geo,material,Math.max(1,max)); m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  m.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(Math.max(1,max)*3),3); m.instanceColor.setUsage(THREE.DynamicDrawUsage); m.castShadow=sombra; m.receiveShadow=true; m.count=0; m.frustumCulled=false; scene.add(m); POOL[nome]={m,n:0,M:m.instanceMatrix.array,Cc:m.instanceColor.array,max:Math.max(1,max)}; }
+const nG=[0,0,0]; for(const d of DES){ const g=[0,0,0]; for(const p of DD[d.id].PLT) g[p[2]]++; g.forEach((v,k)=>nG[k]=Math.max(nG[k],v)); }   // peças para o maior dos dois desenhos
+const nT=nG[0], nB=nG[1], nC=nG[2];
+/* ---------- cafeeiro: geometrias compartilhadas ---------- */
+// ramo lateral (plagiotrópico): comprimento 1 ao longo de +Z, levemente arqueado, com pares de folhas elípticas dobradas na nervura e de ponta caída. Os ramos não projetam sombra (o miolo projeta): metade do custo
+const CAFE_NOS=[.22,.4,.58,.76,.93], cafeEixo=z=>0.10*z-0.24*z*z;
+function ramoCafe(seed){ const r=mulberry(seed), pos=[], col=[], idx=[];
+  for(let k=0;k<=4;k++){ const z=k/4, y=cafeEixo(z), w=0.02*(1-0.6*z); pos.push(-w,y,z, w,y,z, 0,y+w*1.5,z); for(let j=0;j<3;j++) col.push(.8,.5,.3);
+    if(k){ const b=k*3, a=b-3; for(const [p,q] of [[0,1],[1,2],[2,0]]) idx.push(a+p,b+p,a+q, a+q,b+p,b+q); } }
+  CAFE_NOS.forEach((z,n)=>{ for(const sd of [-1,1]){ const len=(0.36-0.025*n)*(0.85+0.3*r()), an=0.8+r()*0.5, dx=Math.sin(an)*sd, dz=Math.cos(an), dy=(r()-.4)*0.3, y=cafeEixo(z), wd=len*0.23, cai=(0.18+0.2*r())*len, k=0.85+0.3*r(), b=pos.length/3;
+      const pt=(f,w,h)=>pos.push(dx*len*f+dz*wd*w, y+dy*len*f+h*len, z+dz*len*f-dx*wd*w);   // f ao longo da folha, w para o lado, h para cima
+      pt(0,0,0.03); pt(0.5,0,0.07); pt(1,0,-cai/len); pt(0.28,0.85,0); pt(0.66,0.9,-0.04); pt(0.28,-0.85,0); pt(0.66,-0.9,-0.04);   // base, meio da nervura (mais alto), ponta caída, 2 pontos de cada borda
+      col.push(1.25*k,1.3*k,1.05*k, 1.25*k,1.3*k,1.05*k, .85*k,.85*k,.8*k, k,k,k, .95*k,.95*k,.95*k, k,k,k, .95*k,.95*k,.95*k);
+      idx.push(b,b+3,b+1, b+3,b+4,b+1, b+4,b+2,b+1, b,b+1,b+5, b+5,b+1,b+6, b+6,b+1,b+2); } });
+  return geoCor(pos,col,idx); }
+// frutos: rosetas de 3 bagas coladas ao ramo nos mesmos nós das folhas (a instância usa a mesma matriz do ramo)
+const frutosCafe=(()=>{ const r=mulberry(77), pos=[], col=[], idx=[], R=0.042;
+  CAFE_NOS.slice(1,4).forEach(z=>{ for(let q=0;q<3;q++){ const a=q*2.1+r()*0.8, cx=Math.cos(a)*0.045, cy=cafeEixo(z)+Math.sin(a)*0.04-0.005, cz=z+(r()-.5)*0.07, b=pos.length/3, rr=R*(0.85+0.3*r());
+      pos.push(cx+rr,cy,cz, cx-rr,cy,cz, cx,cy+rr,cz, cx,cy-rr,cz, cx,cy,cz+rr, cx,cy,cz-rr); for(let j=0;j<6;j++) col.push(1,1,1);
+      for(const [i,j,k] of [[0,2,4],[2,1,4],[1,3,4],[3,0,4],[2,0,5],[1,2,5],[3,1,5],[0,3,5]]) idx.push(b+i,b+j,b+k); } });
+  return geoCor(pos,col,idx); })();
+const CAFE_R=LEVE?6:12, CAFE_FR=LEVE?3:5;   // ramos e ramos com fruto por planta
+pool('ramoA',ramoCafe(301),mat({side:THREE.DoubleSide,vertexColors:true,roughness:.6}),nC*CAFE_R/2,false); pool('ramoB',ramoCafe(402),mat({side:THREE.DoubleSide,vertexColors:true,roughness:.6}),nC*CAFE_R/2,false);
+pool('cafeFr',frutosCafe,mat({vertexColors:true,roughness:.45}),nC*CAFE_FR,false);
+pool('cafeA',tufo(11,1),mat(),nC,!TOQUE); pool('cafeB',tufo(23,1),mat(),nC,!TOQUE); pool('cafeT',cil(.7,1,5),mat(),nC,false);
+pool('fruto',new THREE.IcosahedronGeometry(1,0),mat({roughness:.5}),nC*4+nT*16+10,false);
+pool('tronco',cil(.7,1,7),mat(),nT+5); pool('galho',cil(.6,1,5),mat(),nT*4+10);
+pool('tufoA',tufo(31,LEVE?1:2),mat(),nT*9+10); pool('tufoB',tufo(47,LEVE?1:2),mat(),nT*9+10);
+// bananeira, por touceira: até 3 pseudocaules (mãe e 2 filhotes), até 21 folhas divididas em duas formas, 1 cacho e até 7 pencas
+const BAN_F=LEVE?7:10, BAN_FILHOS=LEVE?1:2, BAN_PENCA=LEVE?6:8;
+pool('estipe',estipeBanana,mat({vertexColors:true}),nB*3+3,!TOQUE);
+pool('folha',folhaBanana(101,0.12,0.85,0.80,2),mat({side:THREE.DoubleSide,vertexColors:true,roughness:.7}),nB*14+14,!TOQUE);    // folha nova: mais em pé
+pool('folhaB',folhaBanana(202,0.30,1.10,0.90,4),mat({side:THREE.DoubleSide,vertexColors:true,roughness:.7}),nB*12+12,!TOQUE);  // folha velha: mais aberta, caída e rasgada
+pool('cacho',cachoBanana,mat({side:THREE.DoubleSide,vertexColors:true}),nB+2,!TOQUE); pool('penca',pencaBanana(BAN_PENCA),mat({vertexColors:true,roughness:.55}),nB*7+7,false);
+const CC=new THREE.Color();
+function poeR(p,X,Y,Z,sx,sy,sz,ry,r,g,b){ if(p.n>=p.max) return; const c=Math.cos(ry),s=Math.sin(ry),M=p.M,o=p.n*16;
+  M[o]=c*sx;M[o+1]=0;M[o+2]=-s*sx;M[o+3]=0; M[o+4]=0;M[o+5]=sy;M[o+6]=0;M[o+7]=0; M[o+8]=s*sz;M[o+9]=0;M[o+10]=c*sz;M[o+11]=0; M[o+12]=X;M[o+13]=Y;M[o+14]=Z;M[o+15]=1;
+  const q=p.n*3; p.Cc[q]=r;p.Cc[q+1]=g;p.Cc[q+2]=b; p.n++; }
+const O=new THREE.Object3D(), Q=new THREE.Quaternion(), UP=new THREE.Vector3(0,1,0), V1=new THREE.Vector3();
+function poe(nome,pos,sx,sy,sz,cor,rx=0,ry=0,rz=0){ const p=POOL[nome]; if(p.n>=p.max) return; O.position.copy(pos); O.rotation.set(rx,ry,rz); O.scale.set(sx,sy,sz); O.updateMatrix(); O.matrix.toArray(p.M,p.n*16); CC.set(cor); CC.toArray(p.Cc,p.n*3); p.n++; }
+function haste(nome,a,b,r,cor){ const p=POOL[nome]; if(p.n>=p.max) return; V1.subVectors(b,a); const L=V1.length(); if(L<1e-3) return; Q.setFromUnitVectors(UP,V1.normalize());
+  O.position.copy(a); O.quaternion.copy(Q); O.scale.set(r,L,r); O.updateMatrix(); O.matrix.toArray(p.M,p.n*16); CC.set(cor); CC.toArray(p.Cc,p.n*3); p.n++; }
+const varia=(hex,seed,amt=.08)=>{const c=new THREE.Color(hex),r=mulberry(seed),hsl={};c.getHSL(hsl);c.setHSL(hsl.h+(r()-.5)*.03,clamp(hsl.s+(r()-.5)*amt,0,1),clamp(hsl.l*(0.88+r()*0.24),0,1));return '#'+c.getHexString();};
+const NPM=Math.max(...DES.map(d=>DD[d.id].NP)), ROT=new Float32Array(NPM); for(let i=0;i<NPM;i++){ ROT[i]=mulberry(i*7919+13)()*6.283; }
+
+/* ---------- entorno: árvores de contexto (CHM fora da área, >= 2,5 m), estáticas, sobre o MDT ---------- */
+const ENT=S.entorno||{arvores:[],volumes:[]}, grpEnt=new THREE.Group(); scene.add(grpEnt);
+{ const A=ENT.arvores, V=ENT.volumes, NT=LEVE?3:5, hc=new THREE.Color(), hsl={};
+  const mk=(geo,max,sombra)=>{ const k=Math.max(1,max), m=new THREE.InstancedMesh(geo,mat({roughness:.95}),k); m.castShadow=sombra; m.receiveShadow=true; m.frustumCulled=false;
+    m.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(k*3),3); grpEnt.add(m); return {m,n:0,M:m.instanceMatrix.array,Cc:m.instanceColor.array,max:k}; };
+  const eT=mk(cil(.7,1,6),A.length,!TOQUE), eA=mk(tufo(61,1),A.length*NT,!TOQUE), eB=mk(tufo(73,1),A.length*NT,!TOQUE);
+  A.forEach(([x,y,H,R,cr,cg,cb],i)=>{ const r=mulberry(i*131+17), z=zAt(x,y)-0.1, X=x-W/2, Z=-(y-HH/2);
+    const hd=H/(2*R), forma=hd>1.8?1:(hd<0.8?2:(r()<0.3?2:0));      // 0 redonda, 1 alongada, 2 larga (guarda-chuva)
+    const B=H*(forma===2?0.45:forma===1?0.22:0.32), ch=H-B, rt=clamp(0.05+0.012*H+0.02*R,0.06,0.35);
+    poeR(eT,X,z,Z,rt,B+ch*0.3,rt,0,.42,.35,.28);
+    hc.setRGB(cr/255,cg/255,cb/255,THREE.SRGBColorSpace); hc.getHSL(hsl);
+    for(let q=0;q<NT;q++){ const a=r()*6.283, off=q?R*(0.3+r()*0.15):0, s=q?0.5+r()*0.12:0.8;
+      const vy=forma===1?B+ch*(0.35+0.4*q/NT):B+ch*(0.52+(r()-.5)*0.2), sv=ch*(forma===2?0.3:forma===1?0.36:0.44)*(q?0.8:1);
+      hc.setHSL(hsl.h+(r()-.5)*.03,clamp(hsl.s*(0.9+r()*.2),0,1),clamp(hsl.l*(0.85+r()*0.3),0,1));
+      poeR(q%2?eB:eA,X+Math.cos(a)*off,z+vy,Z+Math.sin(a)*off,R*s,sv,R*s*(0.9+r()*.2),r()*6.283,hc.r,hc.g,hc.b); } });
+  // estruturas (telhado, caixa d'água): caixa simples no retângulo mínimo, altura do CHM
+  const box=new THREE.BoxGeometry(1,1,1); box.translate(0,.5,0); const eV=mk(box,V.length,!TOQUE);
+  for(const v of V){ const [p0,p1,p2]=v.p, L1=Math.hypot(p1[0]-p0[0],p1[1]-p0[1]), L2=Math.hypot(p2[0]-p1[0],p2[1]-p1[1]), ang=Math.atan2(p1[1]-p0[1],p1[0]-p0[0]);
+    const cx=(p0[0]+p2[0])/2, cy=(p0[1]+p2[1])/2, zb=Math.min(...v.p.map(([x,y])=>zAt(x,y)))-0.1, zt=zAt(cx,cy)+v.h;
+    hc.setRGB(v.c[0]/255,v.c[1]/255,v.c[2]/255,THREE.SRGBColorSpace); poeR(eV,cx-W/2,zb,-(cy-HH/2),L1,zt-zb,L2,ang,hc.r,hc.g,hc.b); }
+  for(const p of [eT,eA,eB,eV]){ p.m.count=p.n; p.m.instanceMatrix.needsUpdate=true; p.m.instanceColor.needsUpdate=true; } }
+
+/* ---------- terreno e análise: texturas da etapa 3c, na mesma moldura do terreno (porte de simulacao_suinocultura2) ---------- */
+const TA=S.terreno, TEXC={}, CLS=TA.decl_classes;
+const LEGT={orto:null,
+  decl:{nat:'calculado do MDT',it:[['#2e7d32',`< ${CLS[0]}%`],['#7cb342',`${CLS[0]} a ${CLS[1]}%`],['#f0c828',`${CLS[1]} a ${CLS[2]}%`],['#f0821e',`${CLS[2]} a ${CLS[3]}%`],['#c82828',`> ${CLS[3]}%`]]},
+  agua:{nat:'inferência: TWI do MDT (acúmulo MFD ÷ declividade)',it:[['#e6e1c8','menor'],['#5087ff','maior umidade relativa']]},
+  cobertura:{nat:'calculado (MDS − MDT) · interpretação no orto',it:[['#e1dcbe','< 0,3 m: solo ou pasto baixo'],['#aac86e','0,3 a 1 m'],['#5a9646','1 a 2,5 m'],['#1e5a28','> 2,5 m']]},
+  face:{nat:'calculado do MDT · para onde a encosta cai',it:[['#dc3c28','norte'],['#f5962a','nordeste'],['#f0dc3c','leste'],['#78be5a','sudeste'],['#3c78c8','sul'],['#645abe','sudoeste'],['#a05aaa','oeste'],['#c85078','noroeste']]},
+  sol:{nat:'calculado · céu limpo de junho a agosto, horizonte local do MDT (sem serras externas e nuvens)',it:[['#3c5aa0','≤ 70% do terreno plano'],['#9a8f6e','cerca de 95%'],['#ffc828','≥ 120%']]}};
+function mapa(k){
+  if(k==='orto') TERR.mat.map=TERR.orto;
+  else { if(!TEXC[k]){ const im=new Image(), t=new THREE.Texture(im); t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy(); im.onload=()=>{t.needsUpdate=true; sujo=true;}; im.src='data:image/jpeg;base64,'+S.tex[k]; TEXC[k]=t; } TERR.mat.map=TEXC[k]; }
+  TERR.mat.needsUpdate=true; const L=LEGT[k];
+  $('terLeg').innerHTML=L?`<span>${L.nat}</span>`+L.it.map(([c,t])=>`<span><i style="background:${c}"></i>${t}</span>`).join(''):'<span>imagem do drone (área de estudo em destaque)</span>'; sujo=true; }
+$('camBase').onchange=e=>mapa(e.target.value);
+function tabTerreno(){
+  const T=TA, tg={c:'<span class="tag calc">calculado</span>',i:'<span class="tag inf">inferência</span>'};
+  const faces=Object.entries(T.face_pct).filter(([,v])=>v>=1).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k} ${fmt(v,0)}%`).join(', ');
+  const lim=[0,...CLS], dc=T.decl_pct.map((v,i)=>v>=0.5?`${i<4?`${lim[i]} a ${lim[i+1]}`:`> ${CLS[3]}`}%: ${fmt(v,0)}%`:'').filter(Boolean).join(' · ');
+  const cb=T.cobertura_pct;
+  $('tabTerreno').innerHTML=[
+    [`Área do perímetro ${tg.c}`,`${fmt(T.area_ha,2)} ha · perímetro ${fmt(T.perimetro_m,0)} m`],
+    [`Cotas (MDT) ${tg.c}`,`${fmt(T.cota_min,1)} a ${fmt(T.cota_max,1)} m · desnível ${fmt(T.desnivel,1)} m`],
+    [`Declividade ${tg.c}`,`média ${fmt(T.decl_media,1)}% · p90 ${fmt(T.decl_p90,1)}% · máx. ${fmt(T.decl_max,1)}%`],
+    [`Classes de declividade ${tg.c}`,dc],
+    [`Face da encosta ${tg.c}`,faces],
+    [`Sol de inverno ${tg.c}`,`${fmt(T.sol_inverno_pct.p10,0)} a ${fmt(T.sol_inverno_pct.p90,0)}% do terreno plano (mediana ${fmt(T.sol_inverno_pct.p50,0)}%)`],
+    [`Umidade relativa (TWI) ${tg.i}`,`mediana ${fmt(T.twi.p50,1)} · os ${fmt(T.twi.area_acima_p90_pct,0)}% mais úmidos acima de ${fmt(T.twi.p90,1)}`],
+    [`Cobertura (MDS − MDT) ${tg.c}`,`< 0,3 m ${fmt(cb.ate_0_3,0)}% · 0,3 a 1 m ${fmt(cb['0_3_a_1'],0)}% · 1 a 2,5 m ${fmt(cb['1_a_2_5'],0)}% · > 2,5 m ${fmt(cb.acima_2_5,0)}%`],
+    [`Centro ${tg.c}`,`${fmt(Math.abs(T.lat),4)}° S, ${fmt(Math.abs(T.lon),4)}° O`]].map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join(''); }
+
+/* ---------- sol e sombra: porte de oliveiras/olival.js (posição pela latitude), mais data livre e relógio pela longitude ---------- */
+const LATR=CFG.lat*Math.PI/180, LON=CFG.lon, SUND=Math.max(W,HH)*1.2+80, DIAG=Math.hypot(W,HH)/2+25;
+Object.assign(sun.shadow.camera,{left:-DIAG,right:DIAG,top:DIAG,bottom:-DIAG,near:1,far:SUND+DIAG*2.2}); sun.shadow.camera.updateProjectionMatrix();
+{ const h=new Date(); $('solDia').value=`${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,'0')}-${String(h.getDate()).padStart(2,'0')}`; }
+function diaDoAno(){ const v=$('solData').value; let m,d;
+  if(v==='livre'){ const s=$('solDia').value; if(!s) return 172; [,m,d]=s.split('-').map(Number); } else [m,d]=v.split('-').map(Number);
+  return Math.round((Date.UTC(ANO0,m-1,d)-Date.UTC(ANO0,0,0))/864e5); }
+const hm=h=>{ h=((h%24)+24)%24; const H_=Math.floor(h), M_=Math.round((h-H_)*60); return `${String(M_===60?H_+1:H_).padStart(2,'0')}:${String(M_%60).padStart(2,'0')}`; };
+function atualizarSol(){
+  const n=diaDoAno(), dec=23.44*Math.PI/180*Math.sin(2*Math.PI*(284+n)/365), hs=+$('solHora').value, ha=(hs-12)*15*Math.PI/180;
+  const sz=Math.sin(LATR)*Math.sin(dec)+Math.cos(LATR)*Math.cos(dec)*Math.cos(ha), sx=-Math.cos(dec)*Math.sin(ha), sn=Math.cos(LATR)*Math.sin(dec)-Math.sin(LATR)*Math.cos(dec)*Math.cos(ha);
+  const c=P(W/2,HH/2,zAt(W/2,HH/2)); sun.target.position.copy(c); sun.position.copy(c).add(new THREE.Vector3(sx,Math.max(sz,0.02),-sn).normalize().multiplyScalar(SUND));
+  sun.intensity=sz>0?1.9*clamp(sz*3,0.3,1):0; sun.target.updateMatrixWorld();
+  const B=2*Math.PI*(n-81)/364, eot=9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B), rel=hs-eot/60-(LON-(CFG.utc_offset_h*15))/15;   // UTC−3: meridiano de 45° O
+  const el=Math.asin(clamp(sz,-1,1))*180/Math.PI, az=(Math.atan2(sx,sn)*180/Math.PI+360)%360, rosa=['N','NE','L','SE','S','SO','O','NO'][Math.round(az/45)%8];
+  $('solHoraTxt').textContent=` ${hm(hs)} solar`;
+  $('solInfo').textContent=sz<=0?`Sol abaixo do horizonte (${hm(rel)} no relógio, UTC−3).`:
+    `Sol a ${fmt(el,0)}° de altura, vindo do ${rosa} (azimute ${fmt(az,0)}°). Cerca de ${hm(rel)} no relógio (UTC−3), pela longitude ${fmt(Math.abs(LON),2)}° O. Sombras das árvores e plantas sobre o MDT; sem serras externas nem nuvens.`;
+  sujo=true; }
+// celular: sombra só com o painel de sol aberto (o mapa de sombra já é menor e o entorno não projeta)
+function sombraModo(){ const on=$('solPainel').open;
+  if(renderer.shadowMap.enabled!==on){ renderer.shadowMap.enabled=on; scene.traverse(o=>{ if(o.material) [].concat(o.material).forEach(m=>m.needsUpdate=true); }); }
+  sujo=true; }
+$('solData').onchange=()=>{ document.querySelectorAll('.solLivre').forEach(e=>e.hidden=$('solData').value!=='livre'); atualizarSol(); };
+$('solDia').onchange=atualizarSol; $('solHora').oninput=atualizarSol; $('solPainel').addEventListener('toggle',sombraModo);
+mapa('orto'); tabTerreno(); atualizarSol(); sombraModo();
+
+/* ---------- água: drenagem simulada (etapa 3d). Faixas fundidas numa malha só por tipo; clique ou toque mostra o trecho ---------- */
+const AG=S.agua, grpDren=new THREE.Group(); grpDren.visible=false; scene.add(grpDren);
+LEGT.acum={nat:'calculado do MDT do recorte: área contribuinte D8, escala log',it:[['#eeead6','< 3 m²'],['#7f9be0',`cerca de ${fmt(AG.est.limiar_rede_m2/10)} m²`],['#0a28aa',`rede (≥ ${fmt(AG.est.limiar_rede_m2)} m²)`]]};
+const COR_ORD=['#7fc4ff','#2f8cff','#0b4fd6','#08308f','#061d5c'];
+function faixas(lista,dz,cor){ // lista: [{pts, w, id}] -> uma malha com cor por vértice e mapa triângulo -> id
+  const pos=[], col=[], tri=[], c=new THREE.Color();
+  for(const it of lista){ const p=it.pts; if(p.length<2) continue; c.set(it.cor||cor);
+    const L=[],Rr=[]; for(let k=0;k<p.length;k++){ const a=p[Math.max(0,k-1)], b=p[Math.min(p.length-1,k+1)]; let tx=b[0]-a[0], ty=b[1]-a[1]; const n=Math.hypot(tx,ty)||1; tx/=n; ty/=n;
+      const nx=-ty*it.w/2, ny=tx*it.w/2, x=p[k][0], y=p[k][1]; L.push(P(x+nx,y+ny,zAt(x+nx,y+ny)+dz)); Rr.push(P(x-nx,y-ny,zAt(x-nx,y-ny)+dz)); }
+    for(let k=0;k<p.length-1;k++){ for(const v of [L[k],Rr[k],L[k+1],L[k+1],Rr[k],Rr[k+1]]){ pos.push(v.x,v.y,v.z); col.push(c.r,c.g,c.b); } tri.push(it.id,it.id); } }
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+  const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2,transparent:true,opacity:.92}));
+  m.userData.tri=tri; m.renderOrder=3; grpDren.add(m); return m; }
+const amax=Math.max(...AG.trechos.map(t=>t.acc_ha),0.01);
+const mRede=faixas(AG.trechos.map(t=>({pts:t.pts,id:t.id,w:0.35+0.45*t.ordem+1.2*Math.sqrt(t.acc_ha/amax),cor:COR_ORD[Math.min(t.ordem-1,4)]})),0.22);
+const mCond=faixas(AG.conducao.map((c,i)=>({pts:c.pts,id:i,w:0.9})),0.18,'#ff8a1f');
+{ const d=new THREE.Line(new THREE.BufferGeometry().setFromPoints(drape(AG.divisor,0.35,1)),new THREE.LineDashedMaterial({color:'#00c2d1',dashSize:2,gapSize:1.2})); d.computeLineDistances(); grpDren.add(d); }
+function pontos(lista,cor,r0){ if(!lista.length) return; const m=new THREE.InstancedMesh(new THREE.SphereGeometry(1,10,8),new THREE.MeshBasicMaterial({color:cor}),lista.length), o=new THREE.Object3D();
+  lista.forEach((q,i)=>{ const r=r0*(q.ha?clamp(0.8+Math.sqrt(q.ha/0.05)*0.4,0.8,2.2):1); o.position.copy(P(q.x,q.y,zAt(q.x,q.y)+0.4)); o.scale.setScalar(r); o.updateMatrix(); m.setMatrixAt(i,o.matrix); });
+  m.instanceMatrix.needsUpdate=true; grpDren.add(m); }
+pontos(AG.concentracao,'#00e5ff',0.45); pontos(AG.entradas,'#7c4dff',0.55); pontos(AG.saidas,'#0d2b8a',0.55);
+pontos(AG.risco.flatMap(r=>r.pts.map(([x,y])=>({x,y}))),'#e53935',0.3);
+$('btDren').onclick=()=>{ grpDren.visible=!grpDren.visible; $('btDren').setAttribute('aria-pressed',grpDren.visible); $('btDren').textContent=grpDren.visible?'Ocultar drenagem':'Mostrar drenagem'; if(!grpDren.visible) $('drenInfo').hidden=true; sujo=true; };
+{ const rc=new THREE.Raycaster(), v=new THREE.Vector2(); let p0=null;
+  renderer.domElement.addEventListener('pointerdown',e=>{ p0=[e.clientX,e.clientY]; });
+  renderer.domElement.addEventListener('pointerup',e=>{ if(!grpDren.visible||!p0||Math.hypot(e.clientX-p0[0],e.clientY-p0[1])>6) return;
+    const b=renderer.domElement.getBoundingClientRect(); v.set((e.clientX-b.left)/b.width*2-1,-(e.clientY-b.top)/b.height*2+1); rc.setFromCamera(v,camera);
+    let hit=rc.intersectObjects([mRede,mCond],false)[0]; const box=$('drenInfo');
+    if(!hit){ const th=rc.intersectObject(TERR.mesh,false)[0]; if(th){ const x=th.point.x+W/2, y=HH/2-th.point.z, tol=Math.max(1.5,(LEVE?28:16)*2*th.distance*Math.tan(camera.fov*Math.PI/360)/b.height); let bd=tol, bi=null, bo=null;
+      const dseg=(p,a,b)=>{ const dx=b[0]-a[0], dy=b[1]-a[1], L2=dx*dx+dy*dy||1, u=clamp(((p[0]-a[0])*dx+(p[1]-a[1])*dy)/L2,0,1); return Math.hypot(p[0]-a[0]-u*dx,p[1]-a[1]-u*dy); };
+      AG.trechos.forEach(tq=>{ for(let k=0;k<tq.pts.length-1;k++){ const d=dseg([x,y],tq.pts[k],tq.pts[k+1]); if(d<bd){ bd=d; bi=tq.id; bo=mRede; } } });
+      AG.conducao.forEach((cq,i)=>{ for(let k=0;k<cq.pts.length-1;k++){ const d=dseg([x,y],cq.pts[k],cq.pts[k+1]); if(d<bd){ bd=d; bi=i; bo=mCond; } } });
+      if(bo) hit={object:bo,id:bi}; } }
+    if(!hit){ box.hidden=true; sujo=true; return; }
+    const id=hit.id??hit.object.userData.tri[hit.faceIndex];
+    if(hit.object===mRede){ const t=AG.trechos[id], pr=AG.principais.find(q=>q.id===t.id);
+      box.innerHTML=`<b>Trecho de drenagem ${t.id+1}</b> · ordem ${t.ordem} (Strahler)<br>área contribuinte ${fmt(t.acc_ha,2)} ha (${fmt(t.acc_ha*1e4,0)} m²)<br>${fmt(t.comp_m,0)} m, ${fmt(t.dentro_m,0)} m na área de estudo · declive ${fmt(t.decl_pct,0)}%${pr?`<br>bacia do trecho: ${fmt(pr.bacia_ha,2)} ha`:''}`; }
+    else { const c=AG.conducao[id]; box.innerHTML=`<b>Linha de cultivo ${c.linha}</b><br>conduz fluxo ao longo de ${fmt(c.comp_m,0)} m (declive a menos de 37° da linha)`; }
+    box.hidden=false; sujo=true; }); }
+function tabAgua(){ const E=AG.est, R_=E.rampa_m||{}, tg={c:'<span class="tag calc">calculado</span>',i:'<span class="tag inf">inferência</span>'};
+  const top=[...AG.linhas].filter(l=>l.conduz_m>0||l.cruzamentos>0).sort((a,b)=>b.conduz_m-a.conduz_m||b.cruzamentos-a.cruzamentos).slice(0,8);
+  $('tabAgua').innerHTML=[
+    [`Rede simulada ${tg.c}`,`${fmt(E.rede_m_area)} m na área · ${fmt(E.rede_m_recorte)} m no recorte · ${E.trechos} trechos, ordem máx. ${E.ordem_max}`],
+    [`Densidade de drenagem ${tg.c}`,`${fmt(E.densidade_km_km2_area,1)} km/km² na área · ${fmt(E.densidade_km_km2_recorte,1)} no recorte`],
+    [`Bacia da área de estudo ${tg.c}`,`${fmt(E.bacia_area_ha,2)} ha drenam para dentro ou passam por ela, ${fmt(E.contribuinte_de_fora_ha,2)} ha vindos de fora`],
+    [`Entradas e saídas ${tg.c}`,`${E.entradas} entrada(s) concentrada(s) (maior ${fmt(E.maior_entrada_ha,2)} ha), o resto entra difuso pela borda alta · ${E.saidas} saídas (maior ${fmt(E.maior_saida_ha,2)} ha)`],
+    [`Pontos de concentração ${tg.c}`,`${E.pontos_concentracao} na área (fluxo passa de ${fmt(E.limiar_concentracao_m2)} m²)`],
+    [`Comprimento de rampa ${tg.c}`,`mediana ${fmt(R_.p50,0)} m · p90 ${fmt(R_.p90,0)} m · máx. ${fmt(R_.max,0)} m até a rede`],
+    [`Cruzamentos com as linhas ${tg.c}`,`${E.cruzamentos} cruzamentos em ${E.linhas_com_cruzamento} linhas`],
+    [`Linhas que conduzem fluxo ${tg.i}`,`${E.linhas_que_conduzem} linhas, ${fmt(E.conducao_total_m)} m no total (laranja no 3D)`],
+    [`Risco de erosão indicativo ${tg.i}`,`${E.pontos_risco} pontos em ${E.linhas_com_risco} linhas: declividade ≥ ${fmt(E.risco_declividade_pct)}% e acumulação ≥ ${fmt(E.risco_acumulacao_m2)} m² juntas (vermelho no 3D)`],
+    [`Bacia limitada ao recorte ${tg.c}`,E.bacia_na_borda_do_recorte_m?`a bacia encosta ${fmt(E.bacia_na_borda_do_recorte_m)} m na borda do voo: a área contribuinte real pode ser maior`:'a bacia não toca a borda do voo'],
+    [`Parâmetros`,`MDT a ${fmt(E.resolucao_m,0)} m, suavização σ ${fmt(E.suavizacao_sigma_m,1)} m, D8, rede ≥ ${fmt(E.limiar_rede_m2)} m² (projeto.yaml, bloco agua)`]]
+    .map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join('')+
+    (top.length?`<tr><td colspan="2"><b>Linhas de cultivo com mais fluxo</b>: `+top.map(l=>`linha ${l.linha} (${l.cruzamentos} cruz., ${fmt(l.conduz_m,0)} m conduzindo${l.risco_m?`, ${l.risco_m} pontos de risco`:''})`).join(' · ')+'</td></tr>':''); }
+tabAgua();
+
+/* ---------- estradas (camada própria e também dentro da camada de drenagem) ---------- */
+const grpEst=new THREE.Group(); scene.add(grpEst);
+function fita(pts,w,dz,cor,op,grupo){ const pos=[]; const L=[],Rr=[];
+  const d=[]; for(let i=0;i<pts.length-1;i++){ const [x0,y0]=pts[i],[x1,y1]=pts[i+1], k=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0))); for(let q=0;q<k;q++) d.push([x0+(x1-x0)*q/k,y0+(y1-y0)*q/k]); } d.push(pts.at(-1));
+  for(let k=0;k<d.length;k++){ const a=d[Math.max(0,k-1)], b=d[Math.min(d.length-1,k+1)]; let tx=b[0]-a[0], ty=b[1]-a[1]; const m=Math.hypot(tx,ty)||1; tx/=m; ty/=m;
+    const nx=-ty*w/2, ny=tx*w/2, x=d[k][0], y=d[k][1], zc=zAt(clamp(x,0,W),clamp(y,0,HH))+dz; L.push(P(x+nx,y+ny,Math.max(zc,zAt(clamp(x+nx,0,W),clamp(y+ny,0,HH))+dz))); Rr.push(P(x-nx,y-ny,Math.max(zc,zAt(clamp(x-nx,0,W),clamp(y-ny,0,HH))+dz))); }
+  for(let k=0;k<d.length-1;k++) for(const v of [L[k],Rr[k],L[k+1],L[k+1],Rr[k],Rr[k+1]]) pos.push(v.x,v.y,v.z);
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:cor,side:THREE.DoubleSide,transparent:true,opacity:op,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1})); m.renderOrder=2; grupo.add(m); return m; }
+for(const e of EST.eixos){ fita(e,EST.meia*2,0.10,'#ffb74d',0.22,grpEst); fita(e,EST.largura,0.14,'#c9b79c',0.8,grpEst);
+  grpEst.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(drape(e,0.3,1)),new THREE.LineBasicMaterial({color:'#5d4037'})));
+  fita(e,EST.largura,0.16,'#8d8d8d',0.55,grpDren); }
+for(const r of EST.agua) fita(r.pts,1.6,0.3,'#ff1744',0.95,grpDren);
+pontos(EST.cruz.map(c=>({x:c.x,y:c.y,ha:c.ha})),'#ff3df2',0.75);
+pontos(EST.pontas.filter(p=>p.situacao==='sem cabeceira'),'#ff00aa',0.22);   // pontas de linha sem cabeceira (junto com a drenagem: diagnóstico)
+if(!EST.disponivel){$('btEst').textContent='Vias indisponíveis';$('btEst').disabled=true;grpEst.visible=false;}
+$('btEst').onclick=()=>{ grpEst.visible=!grpEst.visible; $('btEst').setAttribute('aria-pressed',grpEst.visible); $('btEst').textContent=grpEst.visible?'Ocultar estradas':'Mostrar estradas'; legenda(); sujo=true; };
+
+/* ---------- quebra-vento: renques, seta do vento, faixa protegida e faixa de competição por ano e cenário ---------- */
+const grpQV=new THREE.Group(); scene.add(grpQV);
+for(const r of QV.renques) grpQV.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(drape(r.pts,0.25,1)),new THREE.LineBasicMaterial({color:'#00e676'})));
+{ let cx=0,cy=0; for(const [x,y] of S.perimetro){cx+=x;cy+=y;} cx/=S.perimetro.length; cy/=S.perimetro.length;
+  const o=P(cx+QV.vento.ux*30,cy+QV.vento.uy*30,zAt(cx,cy)+26), dir=new THREE.Vector3(-QV.vento.ux,0,QV.vento.uy).normalize();
+  grpQV.add(new THREE.ArrowHelper(dir,o,22,'#00b8d4',6,3.2)); }
+const GQ={nx:QV.grades.nx,ny:QV.grades.ny,c:b64(QV.grades.c),p:b64(QV.grades.p),o:b64(QV.grades.o),dq:b64(QV.grades.dq)};
+let mProt=null, mComp=null, qvChave='', qvOn=true;
+const qvVis=()=>{ grpQV.visible=qvOn&&des==='com'; };
+function malhaCelulas(teste,cor,op,dz){ const pos=[]; for(let r=0;r<GQ.ny;r++) for(let c=0;c<GQ.nx;c++){ if(!teste(r*GQ.nx+c)) continue; const x0=c,x1=c+1,y1=HH-r,y0=HH-r-1;
+    const a=P(x0,y0,zAt(x0,y0)+dz), b=P(x1,y0,zAt(x1,y0)+dz), d=P(x0,y1,zAt(x0,y1)+dz), e=P(x1,y1,zAt(x1,y1)+dz); for(const v of [a,b,d,b,e,d]) pos.push(v.x,v.y,v.z); }
+  const g=new THREE.BufferGeometry(); g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:cor,transparent:true,opacity:op,side:THREE.DoubleSide,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1})); m.renderOrder=1; grpQV.add(m); return m; }
+function atualizarQV(){ if(des!=='com') return; const y=Math.round(ano), id=CEN[cen].id, I=IND(id)[y], k=id+':'+y; if(k===qvChave) return; qvChave=k;
+  for(const m of [mProt,mComp]) if(m){ grpQV.remove(m); m.geometry.dispose(); m.material.dispose(); }
+  const G=GQ[NIVC[id]], h10=I.h_qv>=1.5?I.h_qv*10:-1, fx=I.faixa_m*4;
+  mProt=malhaCelulas(i=>G[i]<=h10&&GQ.dq[i]>fx,'#00b8d4',0.26,0.08); mComp=malhaCelulas(i=>GQ.dq[i]<255&&GQ.dq[i]<=fx&&fx>0,'#ff9100',0.34,0.09); sujo=true; }
+$('btQV').onclick=()=>{ qvOn=!qvOn; qvVis(); $('btQV').setAttribute('aria-pressed',qvOn); $('btQV').textContent=qvOn?'Ocultar quebra-vento e faixa protegida':'Mostrar quebra-vento e faixa protegida'; legenda(); sujo=true; };
+
+const ANO_INI=Math.max(0,Math.min(ANOS,CFG.ano_inicial??1));   // estado inicial: projeto.yaml, bloco site
+let cen=Math.max(0,CEN.findIndex(c=>c.id===CFG.cenario_inicial)), ano=ANO_INI, modoCor='nat'; if(!CEN.some(c=>c.id===CFG.cenario_inicial)) cen=1;
+const CVERM=new THREE.Color('#b3261e');
+function cor(i){ const e=ESP[PLT[i][2]]; return modoCor==='nat'?varia(e.nat,i*31+5):e.cat; }
+function desenharArvore(i,x,y,z,H,R,F,fruta){
+  const CD=2*R, D=0.557*Math.pow(Math.max(H*CD,0.01),0.809), B=Math.min(H*0.35,1.4+H*0.12);
+  const base=P(x,y,z-0.1), r=mulberry(i*41+7), rt=Math.max(0.03,D/200*1.15), c=cor(i);
+  const topo=base.clone(); topo.y+=B+(H-B)*0.35; haste('tronco',base,topo,rt,'#6b5a48');
+  const nb=H>3?4:2; for(let q=0;q<nb;q++){ const a=q/nb*6.283+r()*.6, a0=base.clone(); a0.y+=B*0.95; const a1=a0.clone(); a1.x+=Math.cos(a)*R*0.55; a1.z+=Math.sin(a)*R*0.55; a1.y+=(H-B)*0.4; haste('galho',a0,a1,rt*0.45,'#6b5a48'); }
+  const n=clamp(Math.round(5+R*1.6),6,18), cy=B+(H-B)*0.55, ry=(H-B)*0.5;
+  for(let q=0;q<n;q++){ const u=r()*2-1, th=r()*6.283, s=Math.sqrt(1-u*u)*0.6, p=base.clone(); p.x+=Math.cos(th)*s*R; p.z+=Math.sin(th)*s*R; p.y+=cy+u*ry*0.55;
+    const sz=0.42+r()*0.2; poe(q%2?'tufoA':'tufoB',p,R*sz,ry*0.55*(0.8+r()*.4),R*sz,modoCor==='nat'?varia(c,i*17+q):c,0,r()*6,0); }
+  if(fruta&&F>0){ for(let q=0;q<F*5;q++){ const u=r()*1.2-.7, th=r()*6.283, s=Math.sqrt(1-Math.min(1,u*u))*0.95, p=base.clone(); p.x+=Math.cos(th)*s*R; p.z+=Math.sin(th)*s*R; p.y+=cy+u*ry*0.6; poe('fruto',p,0.08,0.1,0.08,'#e0a030'); } } }
+/* bananeira (touceira): pseudocaule com leve inclinação, folhas em espiral (as novas em pé no centro, as velhas abertas e caídas),
+   filhotes, folhas secas pendentes e, quando o indicador de frutificação do modelo (F>0) diz que a planta produz, cacho com pencas e coração.
+   O número de pencas acompanha o nível de F (1 a 3); não há estágio de maturação. Tudo é sorteado pela semente da planta: não pisca ao passar os anos. */
+const EU=new THREE.Euler(0,0,0,'YXZ'), rnd=(a,b)=>{ const s=Math.sin(a*12.9898+b*78.233)*43758.5453; return s-Math.floor(s); };
+function poeYX(p,x,y,z,sx,sy,sz,rx,ry,rz,r,g,b){ if(p.n>=p.max) return; O.position.set(x,y,z); EU.set(rx,ry,rz); O.quaternion.setFromEuler(EU); O.scale.set(sx,sy,sz); O.updateMatrix(); O.matrix.toArray(p.M,p.n*16);
+  const q=p.n*3; p.Cc[q]=r; p.Cc[q+1]=g; p.Cc[q+2]=b; p.n++; }
+const C_EST=linCor('#8f9b55'), C_SECA=linCor('#a58a58'), C_BAN=linCor('#b6cc4a');
+function pseudocaule(sd,bx,by,bz,hs,L,nf,azL,inc,azC,cr,cg,cb,nat,secas,F){
+  const rt=0.03+0.036*hs, ax=Math.sin(inc)*Math.sin(azL), ay=Math.cos(inc), az0=Math.sin(inc)*Math.cos(azL), tx=bx+ax*hs, ty=by+ay*hs, tz=bz+az0*hs, ke=nat?0.88+0.24*rnd(sd,2):1;
+  poeYX(POOL.estipe,bx,by,bz,rt,hs,rt,inc,azL,0,C_EST[0]*ke,C_EST[1]*ke,C_EST[2]*ke);
+  const a0=rnd(sd,1)*6.2832, desvia=a=>{ if(azC==null) return a; const d=((a-azC)%6.2832+9.4248)%6.2832-3.1416; return Math.abs(d)<0.5?a+(d<0?-1:1)*(0.6-Math.abs(d)):a; };
+  for(let q=0;q<nf;q++){ const u=nf>1?q/(nf-1):0, velha=u>0.5; let az=a0+q*2.39996+(rnd(sd,q+7)-.5)*0.5; if(u>0.3) az=desvia(az);
+    const rx=(velha?0.15+(u-.5):-0.05+0.9*u)+(rnd(sd,q+31)-.5)*0.16, Lq=L*(0.82+0.3*rnd(sd,q+53))*(q?1:0.8), wx=0.9+0.25*rnd(sd,q+61), d=q*0.012*hs, o=rt*0.3;
+    const k=nat?0.86+0.26*rnd(sd,q+71):1, am=nat?u:0;
+    poeYX(velha?POOL.folhaB:POOL.folha,tx-ax*d+Math.sin(az)*o,ty-ay*d,tz-az0*d+Math.cos(az)*o,Lq*wx,Lq,Lq,rx,az,(rnd(sd,q+83)-.5)*0.3,cr*k*(1+0.22*am),cg*k,cb*k*(1-0.25*am)); }
+  for(let s=0;s<secas;s++){ const az=desvia(a0+2.1+s*2.7+rnd(sd,s+91)), Lq=L*(0.55+0.15*rnd(sd,s+93)), d=0.07*hs, k=0.8+0.3*rnd(sd,s+95);   // folha seca pendurada junto ao pseudocaule
+    poeYX(POOL.folha,tx-ax*d+Math.sin(az)*rt*.6,ty-ay*d,tz-az0*d+Math.cos(az)*rt*.6,Lq*0.42,Lq,Lq,1.05+0.2*rnd(sd,s+97),az,(rnd(sd,s+99)-.5)*0.4,C_SECA[0]*k,C_SECA[1]*k,C_SECA[2]*k); }
+  if(azC!=null){ const sB=Math.min(1,hs/1.75), sA=Math.sin(azC), cA=Math.cos(azC), kc=0.9+0.2*rnd(sd,101), np=Math.min(7,4+F);
+    poeYX(POOL.cacho,tx,ty,tz,sB,sB,sB,0,azC,0,kc,kc,kc);
+    for(let h=0;h<np;h++){ const yl=CACHO_Y0-h*CACHO_DY, zl=zCacho(yl)*sB, sh=sB*(1.08-0.06*h)*(0.95+0.1*rnd(sd,h+111)), k=0.9+0.2*rnd(sd,h+121);
+      poeYX(POOL.penca,tx+sA*zl,ty+yl*sB,tz+cA*zl,sh,sh,sh,(rnd(sd,h+131)-.5)*0.18,rnd(sd,h+141)*6.2832,(rnd(sd,h+151)-.5)*0.18,C_BAN[0]*k,C_BAN[1]*k,C_BAN[2]*k); } } }
+function desenharBananeira(i,x,y,z,H,R,F){
+  const X=x-W/2, Z=-(y-HH/2), Y=z-0.05, hs=H*(0.62+0.26*clamp((H-0.5)/1.5,0,1)), L=clamp(1.35*R,0.6*H,0.8*H), nat=modoCor==='nat', nf=clamp(Math.round(3+hs*2.6),4,BAN_F);
+  CC.set(cor(i)); const cr=CC.r, cg=CC.g, cb=CC.b;
+  // cacho virado para a entrelinha (perpendicular à orientação média das linhas), de um lado ou do outro: fica à vista em "Entre as linhas"
+  const lado=rnd(i,3)<0.5?1:-1, azE=Math.atan2(DP[0]*lado,-DP[1]*lado)+(rnd(i,4)-.5)*0.7, azC=F>0?azE:null;
+  pseudocaule(i*3+1,X,Y,Z,hs,L,nf,F>0?azE:rnd(i,6)*6.2832,0.02+0.05*rnd(i,5),azC,cr,cg,cb,nat,nat&&hs>1.6?1+(rnd(i,8)<0.3?1:0):0,F);
+  for(let k=0;k<BAN_FILHOS;k++){ const fk=clamp((H-(1.1+0.9*k))/0.8,0,1); if(fk<=0) continue;   // filhotes: surgem quando a mãe cresce, do lado oposto ao cacho
+    const an=azE+Math.PI*(0.62+0.76*k)+(rnd(i,20+k)-.5)*0.8, dist=0.30+0.16*rnd(i,22+k), hk=hs*(0.5-0.17*k)*(0.35+0.65*fk)*(0.85+0.3*rnd(i,24+k));
+    pseudocaule(i*3+2+k,X+Math.sin(an)*dist,Y,Z+Math.cos(an)*dist,hk,L*hk/hs*1.3,clamp(Math.round(2+hk*2.6),3,5-k),an,0.06+0.06*rnd(i,26+k),null,cr,cg,cb,nat,0,0); } }
+function construir(){
+  const c=CEN[cen], A=AR[c.id], t=ano, y0=Math.floor(t), y1=Math.min(ANOS,y0+1), f=t-y0, yi=Math.round(t);
+  for(const k in POOL) POOL[k].n=0;
+  for(let i=0;i<NP;i++){
+    if(!(PLT[i][3]&c.bit) || !A.V[y0*NP+i]) continue;
+    const H=(A.H[y0*NP+i]*(1-f)+A.H[y1*NP+i]*f)/10, R=(A.R[y0*NP+i]*(1-f)+A.R[y1*NP+i]*f)/20, F=A.F[yi*NP+i], g=PLT[i][2];
+    const x=PLT[i][0], y=PLT[i][1], z=PZ[i];
+    if(g===0){ desenharArvore(i,x,y,z,H,Math.max(R,0.2),0,false); continue; }
+    if(g===1){ desenharBananeira(i,x,y,z,H,Math.max(R,0.1),F); continue; }
+    // café: tronco, miolo escuro (dá volume) e ramos laterais com folhas em espiral, do mais comprido embaixo ao mais curto no topo; tudo na escala de H e R do modelo
+    const X=x-W/2, Z=-(y-HH/2), yb=z-0.05, ro=ROT[i], nat=modoCor==='nat'; CC.set(cor(i)); const kp=nat?0.9+0.2*rnd(i,1):1, rr=CC.r*kp, gg=CC.g*kp, bb=CC.b*kp; const Rc=Math.max(R,0.12);
+    poeR(POOL.cafeT,X,yb,Z,0.03+0.008*H,H*0.9,0.03+0.008*H,0,.35,.27,.2);
+    poeR(POOL.cafeA,X,yb+H*0.42,Z,Rc*0.48,H*0.3,Rc*0.44,ro,rr*.5,gg*.5,bb*.5);
+    poeR(POOL.cafeB,X,yb+H*0.76,Z,Rc*0.32,H*0.2,Rc*0.3,ro+1,rr*.55,gg*.55,bb*.55);
+    const nfr=F>0?Math.min(CAFE_FR,F+2):0;
+    for(let q=0;q<CAFE_R;q++){ const u=(q+0.5)/CAFE_R, hh=0.14+0.8*u+(rnd(i,q+3)-.5)*0.04, len=Rc*(1.12-0.62*Math.pow(u,1.4))*(0.88+0.24*rnd(i,q+10)), az=ro+q*2.39996+(rnd(i,q+20)-.5)*0.5, k=(nat?0.85+0.3*rnd(i,q+30):1)*1.15;
+      poeR(q%2?POOL.ramoA:POOL.ramoB,X,yb+H*hh,Z,len,len,len,az,rr*k,gg*k,bb*k);
+      if((q%2)&&(q>>1)<nfr) poeR(POOL.cafeFr,X,yb+H*hh,Z,len,len,len,az,CVERM.r,CVERM.g,CVERM.b); }   // frutos junto aos ramos; quantos ramos frutificam acompanha o nível de F
+  }
+  for(const k in POOL){ const p=POOL[k]; p.m.count=p.n; p.m.instanceMatrix.needsUpdate=true; p.m.instanceColor.needsUpdate=true; }
+  sujo=true; }
+
+/* ---------- vistas (enquadramento do template4) ---------- */
+function enquadra([hx,hy],elev,larg=0.94){   // larg: fração da largura da tela ocupada pela área de estudo
+  const pts=[]; for(const [x,y] of PER){ const z=zAt(clamp(x,0,W-1),clamp(y,0,HH-1)); pts.push(P(x,y,z),P(x,y,z+8)); }
+  let cx=0,cy=0; for(const [x,y] of PER){cx+=x;cy+=y;} cx/=PER.length; cy/=PER.length;
+  const d3=new THREE.Vector3(hx*Math.cos(elev),Math.sin(elev),-hy*Math.cos(elev)).normalize(), T=P(cx,cy,zAt(cx,cy));
+  const f=d3.clone().negate(), rr=new THREE.Vector3().crossVectors(f,camera.up).normalize(), uu=new THREE.Vector3().crossVectors(rr,f);
+  const hpx=box.clientHeight||600, yb=-1+2*72/hpx, yt=1-2*48/hpx;
+  let d=Math.max(W,HH)*1.5;
+  for(let it=0;it<4;it++){
+    camera.position.copy(T).addScaledVector(d3,d); camera.lookAt(T); camera.updateMatrixWorld();
+    let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9; for(const q of pts){ const v=q.clone().project(camera); x0=Math.min(x0,v.x); x1=Math.max(x1,v.x); y0=Math.min(y0,v.y); y1=Math.max(y1,v.y); }
+    const tv=Math.tan(camera.fov*Math.PI/360), th=tv*camera.aspect;
+    T.addScaledVector(rr,(x0+x1)/2*th*d).addScaledVector(uu,((y0+y1)/2-(yb+yt)/2)*tv*d);
+    d*=Math.max((x1-x0)/2/larg,(y1-y0)/(yt-yb)/0.97); }
+  camera.position.copy(T).addScaledVector(d3,d); controls.target.copy(T); }
+const AZ=(MO.diag.linhas.azimute_graus)*Math.PI/180, DL=[Math.sin(AZ),Math.cos(AZ)], DP=[Math.cos(AZ),-Math.sin(AZ)];
+// visão geral: frontal, perpendicular à orientação média das linhas (DP), do lado pedido em projeto.yaml (site.camera_inicial); as linhas ficam horizontais na tela
+const CAM=CFG.camera_inicial||{}, LADO={norte:[0,1],sul:[0,-1],leste:[1,0],oeste:[-1,0]}[CAM.lado]||[0,1], SCAM=(DP[0]*LADO[0]+DP[1]*LADO[1])>=0?1:-1, HCAM=[DP[0]*SCAM,DP[1]*SCAM];
+function vue(v){ document.querySelectorAll('.views button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.vue===v));
+  if(v==='geral') enquadra(HCAM,clamp(CAM.inclinacao_graus??32,5,85)*Math.PI/180,clamp(CAM.largura_area??0.7,0.2,0.94));
+  if(v==='cima') enquadra(camera.aspect<1?[0,1]:[1,0.0001],89.6*Math.PI/180);
+  if(v==='pe'){ let cx=0,cy=0; for(const [x,y] of PER){cx+=x;cy+=y;} cx/=PER.length; cy/=PER.length;
+    let b=0,bd=1e9; for(let i=0;i<NP;i++){ if(PLT[i][2]!==2) continue; const d=(PLT[i][0]-cx)**2+(PLT[i][1]-cy)**2; if(d<bd){bd=d;b=i;} }
+    const ex=PLT[b][0]+DP[0]*CFG.entrelinha/2-DL[0]*12, ey=PLT[b][1]+DP[1]*CFG.entrelinha/2-DL[1]*12;
+    camera.position.copy(P(ex,ey,zAt(ex,ey)+1.6)); const tx=ex+DL[0]*25, ty=ey+DL[1]*25; controls.target.copy(P(tx,ty,zAt(tx,ty)+1.2)); }
+  controls.update(); sujo=true; }
+
+/* ---------- interface ---------- */
+const zs=$('cenarios');
+CEN.forEach((c,i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=c.nome; b.setAttribute('aria-pressed',i===cen);
+  b.onclick=()=>{ cen=i; zs.querySelectorAll('button').forEach((x,j)=>x.setAttribute('aria-pressed',j===i)); construir(); maj(); }; zs.appendChild(b); });
+// seletor de desenho: troca plantas, séries, economia, textos, legenda e camadas do quebra-vento
+const zd=$('desenhos');
+DES.forEach(d=>{ const b=document.createElement('button'); b.type='button'; b.textContent=d.nome; b.dataset.des=d.id; b.setAttribute('aria-pressed',d.id===des); b.onclick=()=>setDesenho(d.id); zd.appendChild(b); });
+function camadasDesenho(){ zd.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.des===des)); $('lbQV').hidden=$('btQV').hidden=des!=='com'; qvVis(); }
+function setDesenho(id){ if(id===des||!DD[id]) return; const ant=des; des=id; ({MO,NP,PLT,AR,PZ}=DD[id]);
+  U=ECON.uPara(U,PAD[ant],PAD[id]); EPAD=PAD[id]; salvaU(); ECO=ECOD[id];
+  camadasDesenho(); textos(); legenda(); premPreenche(); premTabelas(); construir(); maj(); }
+document.querySelectorAll('.views button').forEach(b=>b.onclick=()=>vue(b.dataset.vue));
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  document.querySelectorAll('[data-painel]').forEach(p=>p.hidden=p.dataset.painel!==b.dataset.aba); dessiner(); });
+const ESPD=()=>ESP.filter(e=>des==='com'||e.id!=='grevilea');
+function legenda(){ const L=ESPD().map(e=>[modoCor==='nat'?e.nat:e.cat,e.nome]);
+  $('mapLeg').innerHTML=L.map(([c,t])=>`<span><i style="background:${c}"></i>${t}</span>`).join('')+`<span><i style="background:#f4d03f"></i>área de estudo</span>`+
+    (grpLinhas.visible?`<span><i style="background:#ffffff;border:1px solid #999"></i>linhas de cultivo</span>`:'')+
+    (grpQV.visible?`<span><i style="background:#00b8d4"></i>faixa protegida do vento</span><span><i style="background:#ff9100"></i>faixa de competição</span>`:'')+
+    (EST.disponivel&&grpEst.visible?`<span><i style="background:#c9b79c"></i>estrada e corredor sem planta</span>`:''); }
+$('camCor').onchange=e=>{ modoCor=e.target.value; legenda(); construir(); };
+$('btLinhas').onclick=()=>{ grpLinhas.visible=!grpLinhas.visible; $('btLinhas').setAttribute('aria-pressed',grpLinhas.visible); $('btLinhas').textContent=grpLinhas.visible?'Ocultar linhas de cultivo':'Mostrar linhas de cultivo'; legenda(); sujo=true; };
+$('btEnt').onclick=()=>{ grpEnt.visible=!grpEnt.visible; $('btEnt').setAttribute('aria-pressed',grpEnt.visible); $('btEnt').textContent=grpEnt.visible?'Ocultar árvores do entorno':'Mostrar árvores do entorno'; sujo=true; };
+$('ano').oninput=e=>{ ano=+e.target.value; lecture=false; $('play').textContent='▶ Passar'; construir(); maj(); };
+$('mAno').max=ANOS; $('ano').max=ANOS; $('mAno').oninput=e=>{ $('ano').value=e.target.value; $('ano').dispatchEvent(new Event('input')); };
+$('mPlay').onclick=()=>$('play').click();
+function syncM(){ $('mPlay').textContent=lecture?'❚❚':'▶'; $('mPlay').setAttribute('aria-label',lecture?'Pausar':'Passar os anos'); const y=Math.round(ano); $('mAno').value=y; $('mAnoTxt').textContent='ano '+y; }
+const stageEl=document.querySelector('.stage'); let cheia=false;
+function modoToque(){ const livre=!TOQUE||cheia; if(TOQUE) controls.zoomSpeed=1;
+  controls.touches= livre ? {ONE:THREE.TOUCH.ROTATE,TWO:THREE.TOUCH.DOLLY_PAN} : {ONE:-1,TWO:THREE.TOUCH.DOLLY_ROTATE};
+  renderer.domElement.style.touchAction= livre ? 'none' : 'pan-y'; }
+modoToque();
+$('btTela').onclick=()=>{ cheia=!cheia; stageEl.classList.toggle('cheia',cheia); document.body.style.overflow=cheia?'hidden':''; $('btTela').textContent=cheia?'✕':'⤢';
+  $('btTela').setAttribute('aria-pressed',cheia); $('btTela').setAttribute('aria-label',cheia?'Sair da tela cheia':'Tela cheia'); modoToque(); };
+{ let dedos=0, tAviso=0; const aviso=$('toque');
+  renderer.domElement.addEventListener('pointerdown',e=>{ if(e.pointerType!=='touch'||cheia||!TOQUE) return; dedos++;
+    clearTimeout(tAviso); tAviso=setTimeout(()=>{ if(dedos===1){ aviso.classList.add('on'); setTimeout(()=>aviso.classList.remove('on'),1600); } },350); });
+  const solta=e=>{ if(e.pointerType==='touch') dedos=Math.max(0,dedos-1); };
+  renderer.domElement.addEventListener('pointerup',solta); renderer.domElement.addEventListener('pointercancel',solta); }
+{ const le=$('lede'), bt=$('leMais'); const ver=()=>{ bt.hidden=!(le.scrollHeight>le.clientHeight+2||le.classList.contains('aberta')); };
+  bt.onclick=()=>{ const a=le.classList.toggle('aberta'); bt.textContent=a?'ler menos':'ler mais'; }; requestAnimationFrame(ver); addEventListener('resize',ver); }
+let lecture=false, dernier=0;
+$('play').onclick=()=>{ lecture=!lecture; $('play').textContent=lecture?'❚❚ Pausar':'▶ Passar'; if(lecture&&ano>=ANOS) ano=0; dernier=0; syncM(); };
+$('indSel').onchange=dessinerC;
+
+const faixa=(k,y,d=0,f=v=>v)=>{ const v=CEN.map(c=>f(IND(c.id)[y][k])); return `${fmt(Math.min(...v),d)} a ${fmt(Math.max(...v),d)}`; };
+/* ---------- economia (pipeline/site/economia.js) ---------- */
+const PE=S.economia, PAD={}, UK=CFG.id+'.premissas.v1'; for(const d of DES) PAD[d.id]=ECON.padroes(DD[d.id].MO,PE);
+let EPAD=PAD[des];   // padrões do desenho na tela; no outro desenho, implantação e custeio por hectare andam na mesma proporção (ECON.uPara)
+let U=Object.assign({},EPAD); try{ const sv=JSON.parse(localStorage.getItem(UK)||'null'); if(sv&&PAD[sv.des]){ const d0=sv.des; delete sv.des; U=ECON.uPara(Object.assign({},PAD[d0],sv),PAD[d0],PAD[des]); } }catch(e){}
+const salvaU=()=>{ try{ localStorage.setItem(UK,JSON.stringify(Object.assign({des},U))); }catch(e){} };
+let ECO=null, ECOD={};
+function recalc(){ ECOD={}; for(const d of DES){ const M=DD[d.id].MO, Ud=ECON.uPara(U,PAD[des],PAD[d.id]), o={};
+    for(const c of CEN){ const rows=ECON.cenario(M,PE,c.id,Ud); o[c.id]={rows,com:ECON.resumo(rows,true,U.taxa),sem:ECON.resumo(rows,false,U.taxa)}; } ECOD[d.id]=o; }
+  ECO=ECOD[des]; }
+const RS=v=>{ if(v==null||!isFinite(v)) return '–'; const a=Math.abs(v), s=v<0?'−':''; return a>=1e6?`${s}R$ ${fmt(a/1e6,2)} mi`:a>=1e4?`${s}R$ ${fmt(a/1e3,1)} mil`:`${s}R$ ${fmt(a,0)}`; };
+const MOD=()=>U.mo_propria?'com':'sem', OUT=()=>U.mo_propria?'sem':'com';
+const linha=(id,Y)=>ECO[id].rows.find(r=>r.ano===Y), idxY=(id,Y)=>ECO[id].rows.findIndex(r=>r.ano===Y);
+const resAno=(r,m)=>m==='com'?r.res_com:r.res_sem, custoAno=(r,m)=>r.caixa+(m==='com'?r.mo:0);
+const custoAcum=(id,Y,m)=>ECO[id].rows.filter(r=>r.ano<=Y).reduce((s,r)=>s+custoAno(r,m),0);
+const fx2=(f,fm=RS)=>{ const v=CEN.map(c=>f(c.id)).filter(v=>v!=null&&isFinite(v)); return v.length?`${fm(Math.min(...v))} a ${fm(Math.max(...v))}`:'–'; };
+const pbTxt=R=>R.payback==null?`não retorna em ${ANOS} anos`:`${R.payback} · ${R.payback_anos} anos do plantio`;
+const pct=v=>v==null||!isFinite(v)?'–':fmt(v*100,1)+'%';
+function maj(){
+  const y=Math.round(ano), c=CEN[cen], I=IND(c.id)[y], Y=ANO0+y, m=MOD(), o=OUT(), id=c.id;
+  $('ano').value=y; $('anoBig').textContent=y; $('anoCal').textContent=Y; syncM(); atualizarQV();
+  $('fase').innerHTML=fase(y,I);
+  const nomeC=id==='provavel'?'Provável':id==='conservador'?'Conservador':'Otimista';
+  $('indTitulo').textContent=`Rentabilidade · ${nomeC} · ${Y}`;
+  $('moCom').setAttribute('aria-pressed',U.mo_propria); $('moSem').setAttribute('aria-pressed',!U.mo_propria);
+  $('moCom').textContent=`com mão de obra própria (R$ ${fmt(U.diaria,0)}/dia)`;
+  const E=ECO[id], R=E[m], Ro=E[o], r=linha(id,Y), i=idxY(id,Y), ac=R.acum[i];
+  const tile=(cls,v,l,fx,sub='')=>`<div class="tile ${cls}"><b>${v}</b><span>${l}</span>${sub?`<small>${sub}</small>`:''}<span class="faixa">${fx}</span></div>`;
+  const outroNome=o==='com'?'com mão de obra própria':'sem pró-labore';
+  const marg=r.receita>0?resAno(r,m)/r.receita:null, cs=ECON.custoSaca(r,m==='com');
+  $('tiles').innerHTML=[
+    tile('key',RS(R.impl),`investimento inicial (implantação no ano 0, ${E.rows[0].ano})`,fx2(k=>ECO[k][m].impl),`${RS(R.impl/AREA_HA)}/ha · pior acumulado ${RS(-R.exposicao)} em ${R.ano_exposicao}`),
+    tile('',RS(custoAcum(id,Y,m)),`custo total acumulado até ${Y}`,fx2(k=>custoAcum(k,Y,m))),
+    tile('',RS(r.receita),`receita bruta em ${Y}`,fx2(k=>linha(k,Y).receita),`${RS(r.receita/AREA_HA)}/ha`),
+    tile('',RS(custoAno(r,m)),`custo em ${Y}`,fx2(k=>custoAno(linha(k,Y),m)),`${RS(custoAno(r,m)/AREA_HA)}/ha · ${fmt(r.dias,0)} dias-homem`),
+    tile(resAno(r,m)>=0?'pos':'neg',RS(resAno(r,m)),`resultado do ano ${Y}`,fx2(k=>resAno(linha(k,Y),m)),`${RS(resAno(r,m)/AREA_HA)}/ha`),
+    tile('key '+(ac>=0?'pos':'neg'),RS(ac),`resultado acumulado do plantio até o ano ${y} (${Y})`,fx2(k=>ECO[k][m].acum[idxY(k,Y)]),`${outroNome}: ${RS(Ro.acum[i])}`),
+    tile('key',R.payback==null?'não retorna':'ano '+R.payback_anos,R.payback==null?`não retorna em ${ANOS} anos`:`ano de retorno (${R.payback}), contado do plantio`,
+      CEN.map(k=>`${k.id==='provavel'?'prov.':k.id==='conservador'?'cons.':'otim.'} ${ECO[k.id][m].payback_anos==null?'não':'ano '+ECO[k.id][m].payback_anos}`).join(' · '),`${outroNome}: ${Ro.payback_anos==null?'não retorna':'ano '+Ro.payback_anos}`),
+    tile(R.vpl>=0?'pos':'neg',RS(R.vpl),`VPL a ${fmt(U.taxa*100,1)}% a.a. (valor no plantio)`,fx2(k=>ECO[k][m].vpl),`${outroNome}: ${RS(Ro.vpl)}`),
+    tile('',pct(R.tir),'TIR (% a.a. real)',fx2(k=>ECO[k][m].tir,pct),`${outroNome}: ${pct(Ro.tir)}`),
+    tile('',pct(marg),`margem em ${Y}`,fx2(k=>{const q=linha(k,Y);return q.receita>0?resAno(q,m)/q.receita:null;},pct)),
+    tile('',cs==null?'–':RS(cs),`custo por saca de café (${fmt(r.sacas,1)} sc no ano)`,fx2(k=>ECON.custoSaca(linha(k,Y),m==='com')),'rateio dos custos comuns pela receita'),
+    tile('',fmt(r.sacas/AREA_HA,1)+' sc/ha',`café beneficiado em ${Y}: ${fmt(r.sacas,1)} sacas de 60 kg`,fx2(k=>linha(k,Y).sacas/AREA_HA,v=>fmt(v,1)),des==='com'?`${fmt(I.protegido_pct,0)}% do café na faixa protegida · renque com ${fmt(I.h_qv,1)} m`:`sem quebra-vento: todo o café exposto, perda de ${fmt(MO0.vento.perda[NIVC[id]]*100,0)}% por vento (premissa a validar)`),
+    tile('',fmt(r.kg_banana,0)+' kg',`banana (cacho) em ${Y}`,fx2(k=>linha(k,Y).kg_banana,v=>fmt(v,0)),`${fmt(I.por_esp.banana)} touceiras`)].join('');
+  const cult=[['café','cafe'],['banana','banana']], mx=Math.max(1,...cult.map(([,k])=>r.rec[k]));
+  $('culturas').innerHTML=cult.map(([n,k])=>`<div><span>${n}</span><i style="width:${100*r.rec[k]/mx}%"></i><span>${RS(r.rec[k])}</span></div>`).join('')+
+    `<p class="mini">${fmt(r.sacas,1)} sacas de café (${fmt(r.sacas/AREA_HA,1)} sc/ha) · ${fmt(r.kg_banana,0)} kg de cacho de banana · ${fmt(r.dias,0)} dias-homem no ano</p>`;
+  $('tilesC').innerHTML=[tile('key',fmt(I.c_total,1),'t C na biomassa e serapilheira',faixa('c_total',y,1)),
+    tile('',fmt(I.co2e_total,0),'t CO2e estocadas',faixa('co2e_total',y)),
+    tile('',fmt(I.co2e_liquido,0),'t CO2e líquidas, descontada a biomassa da pastagem',faixa('co2e_liquido',y)),
+    tile('',I.seq_co2e==null?'–':fmt(I.seq_co2e,1),'t CO2e sequestradas no ano (líquido)',y?faixa('seq_co2e',y,1):'ano 0: sem ano anterior'),
+    tile('',fmt(I.c_solo_ganho*44/12,0),'t CO2e no solo acima da linha de base (baixa confiança)',faixa('c_solo_ganho',y,0,v=>v*44/12)),
+    tile('',fmt(I.cobertura,0)+'%','cobertura de copa',faixa('cobertura',y)),tile('',fmt(I.vivas),'plantas vivas',faixa('vivas',y))].join('');
+  const Ez=I.estrato; $('estratos').innerHTML=[['alto','≥ 5 m'],['medio','2,5 a 5 m'],['arbustivo','0,8 a 2,5 m'],['pequena','< 0,8 m']].map(([k,l])=>`<div><b>${fmt(Ez[k])}</b>${l}</div>`).join('')+
+    ESPD().map(e=>`<div><b>${fmt(I.por_esp[e.id])}</b>${e.curto}</div>`).join('')+`<div><b>${fmt(I.falhas_cafe)}</b>falhas de café</div>`;
+  $('cmpTitulo').textContent=`Cenários · ${des==='com'?'com':'sem'} quebra-vento · ${m==='com'?'com mão de obra própria':'sem pró-labore'}`;
+  // comparação direta dos dois desenhos no cenário escolhido
+  { const q=d=>{ const e=ECOD[d][id], Rr=e[m], rr=e.rows.find(x=>x.ano===Y); return {pes:DD[d].MO.econ.contagens.cafe,rec:rr.receita,fin:Rr.final,pb:Rr.payback_anos,vpl:Rr.vpl}; }, a=q('com'), b=q('sem');
+    const pbT=v=>v==null?'não retorna':'ano '+v, sg=(v,f)=>(v>0?'+':v<0?'−':'')+f(Math.abs(v)), cn=v=>v<0?'neg':'pos';
+    const sel=d=>d===des?' sel':'', lin=(nome,f,dif,cor)=>`<tr><td>${nome}</td><td class="n${sel('com')} ${cor?cn(cor(a)):''}">${f(a)}</td><td class="n${sel('sem')} ${cor?cn(cor(b)):''}">${f(b)}</td><td class="n">${dif}</td></tr>`;
+    $('dvTitulo').textContent=`Com e sem quebra-vento · ${nomeC}`;
+    $('dv').innerHTML=`<tr><th></th><th class="${sel('com')}">com</th><th class="${sel('sem')}">sem</th><th>sem − com</th></tr>`+
+      lin('Pés de café',v=>fmt(v.pes),sg(b.pes-a.pes,v=>fmt(v)))+lin(`Receita em ${Y}`,v=>RS(v.rec),sg(b.rec-a.rec,RS))+
+      lin(`Acumulado em ${ANOS} anos`,v=>RS(v.fin),sg(b.fin-a.fin,RS),v=>v.fin)+lin('Ano de retorno',v=>pbT(v.pb),a.pb==null||b.pb==null?'–':b.pb===a.pb?'igual':sg(b.pb-a.pb,v=>fmt(v))+' ano(s)')+
+      lin('VPL',v=>RS(v.vpl),sg(b.vpl-a.vpl,RS),v=>v.vpl);
+    const pv=MO0.vento.perda, pc_=MO0.vento.competicao, k=NIVC[id];
+    $('dvTxt').textContent=`${m==='com'?'Com mão de obra própria':'Sem pró-labore'}, R$ de 2026. Os pés a mais vêm da geometria: sem renque, café e banana ocupam a faixa de ${fmt(CFG.recuo_cafe,0)} m junto às grevíleas. O resto depende de premissas a validar: perda de ${fmt(pv[k]*100,0)}% do café exposto ao vento (faixa de ${fmt(pv.o*100,0)} a ${fmt(pv.c*100,0)}%), perda de ${fmt(pc_[k]*100,0)}% na faixa de competição do renque, alcance da proteção e crescimento da grevílea.`; }
+  const cl=v=>v<0?'neg':'pos';
+  const pa=R=>R.payback_anos==null?'não retorna':`ano ${R.payback_anos} (${R.payback})`;
+  const L=[['Ano de retorno',k=>pa(ECO[k][m])],['Ano de retorno (outro modo)',k=>pa(ECO[k][o])],
+    ['VPL',k=>RS(ECO[k][m].vpl),k=>cl(ECO[k][m].vpl)],['TIR',k=>pct(ECO[k][m].tir)],[`Acumulado até ${Y}`,k=>RS(ECO[k][m].acum[idxY(k,Y)]),k=>cl(ECO[k][m].acum[idxY(k,Y)])],
+    [`Acumulado no ano ${ANOS} (${ANO0+ANOS})`,k=>RS(ECO[k][m].final),k=>cl(ECO[k][m].final)],[`Resultado em ${Y}`,k=>RS(resAno(linha(k,Y),m)),k=>cl(resAno(linha(k,Y),m))],
+    [`Café em ${Y} (sacas)`,k=>fmt(linha(k,Y).sacas,1)],[`Preço do café`,k=>RS(PE.precos.cafe_saca[ECON.NIV[k]]*U.preco_cafe/EPAD.preco_cafe)],
+    ...(des==='com'?[['Café protegido do vento',k=>fmt(IND(k)[y].protegido_pct,0)+'%'],['Café na faixa de competição',k=>fmt(IND(k)[y].faixa_pct,0)+'%']]:[['Perda do café por vento (premissa a validar)',k=>fmt(MO0.vento.perda[NIVC[k]]*100,0)+'%']]),['Plantas vivas',k=>fmt(IND(k)[y].vivas)]];
+  $('cmp').innerHTML='<tr><th></th>'+CEN.map((c,i)=>`<th${i===cen?' style="color:var(--ink)"':''}>${c.id==='provavel'?'Provável':c.id==='conservador'?'Conserv.':'Otimista'}</th>`).join('')+'</tr>'+
+    L.map(([n,f,fc])=>`<tr><td>${n}</td>`+CEN.map(c=>`<td class="n ${fc?fc(c.id):''}">${f(c.id)}</td>`).join('')+'</tr>').join('');
+  dessiner(); dessinerC(); }
+function eixos(g,w,h,L,R,T,B,mn,mx,fmtv){ const css=getComputedStyle(document.documentElement), muted=css.getPropertyValue('--muted'), line=css.getPropertyValue('--line');
+  const Yp=q=>T+(1-(q-mn)/(mx-mn))*(h-T-B); g.font='11px "JetBrains Mono",monospace'; g.fillStyle=muted; g.strokeStyle=line; g.lineWidth=1;
+  for(let q=0;q<=4;q++){const val=mn+(mx-mn)*q/4; g.beginPath(); g.moveTo(L,Yp(val)); g.lineTo(w-R,Yp(val)); g.stroke(); g.fillText(fmtv(val),2,Yp(val)+4);} return Yp; }
+function prep(cv){ if(!cv.offsetParent) return null; const dpr=devicePixelRatio||1, w=cv.clientWidth, h=cv.clientHeight; cv.width=w*dpr; cv.height=h*dpr; const g=cv.getContext('2d'); g.scale(dpr,dpr); g.clearRect(0,0,w,h); return {g,w,h}; }
+// gráfico principal: resultado acumulado desde o plantio, faixa dos três cenários, retorno e ano atual
+function dessiner(){
+  const P=prep($('graph')); if(!P) return; const {g,w,h}=P, m=MOD(), css=getComputedStyle(document.documentElement), ink=css.getPropertyValue('--ink'), muted=css.getPropertyValue('--muted');
+  const rows=ECO.provavel.rows, Y0=rows[0].ano, Y1=rows.at(-1).ano;
+  const AO=ECOD[OUTRO()][CEN[cen].id][m].acum;   // o outro desenho no cenário escolhido, em tracejado
+  let mn=0,mx=0; for(const c of CEN) for(const v of ECO[c.id][m].acum){ mn=Math.min(mn,v); mx=Math.max(mx,v); } for(const v of AO){ mn=Math.min(mn,v); mx=Math.max(mx,v); } const pad=(mx-mn)*0.08||1; mn-=pad; mx+=pad;
+  const L=52,R=8,T=10,B=22, X=a=>L+(a-Y0)/(Y1-Y0)*(w-L-R);
+  const Yp=eixos(g,w,h,L,R,T,B,mn,mx,v=>Math.abs(v)>=1e6?fmt(v/1e6,1)+' mi':fmt(v/1e3,0)+' mil');
+  g.fillStyle=muted;
+  for(let a=Math.ceil(Y0/10)*10;a<=Y1;a+=10) g.fillText(a,X(a)-14,h-6);
+  g.strokeStyle=ink; g.globalAlpha=.6; g.beginPath(); g.moveTo(L,Yp(0)); g.lineTo(w-R,Yp(0)); g.stroke(); g.globalAlpha=1;
+  const lo=[],hi=[]; rows.forEach((r,k)=>{ const qs=CEN.map(c=>ECO[c.id][m].acum[k]); lo.push(Math.min(...qs)); hi.push(Math.max(...qs)); });
+  g.fillStyle='rgba(47,91,42,.16)'; g.beginPath(); hi.forEach((q,k)=>k?g.lineTo(X(rows[k].ano),Yp(q)):g.moveTo(X(rows[k].ano),Yp(q))); for(let k=lo.length-1;k>=0;k--) g.lineTo(X(rows[k].ano),Yp(lo[k])); g.closePath(); g.fill();
+  CEN.forEach((c,i)=>{ const A=ECO[c.id][m].acum; g.strokeStyle=c.cor; g.globalAlpha=i===cen?1:.55; g.lineWidth=i===cen?2.6:1.3; g.beginPath(); A.forEach((q,k)=>k?g.lineTo(X(rows[k].ano),Yp(q)):g.moveTo(X(rows[k].ano),Yp(q))); g.stroke(); });
+  g.globalAlpha=1; g.strokeStyle='#c2571a'; g.lineWidth=1.8; g.setLineDash([6,4]); g.beginPath(); AO.forEach((q,k)=>k?g.lineTo(X(rows[k].ano),Yp(q)):g.moveTo(X(rows[k].ano),Yp(q))); g.stroke(); g.setLineDash([]);
+  g.globalAlpha=1; g.lineWidth=1;
+  CEN.forEach((c,i)=>{ const pb=ECO[c.id][m].payback; if(pb==null) return; g.fillStyle=c.cor; g.strokeStyle='#fff'; g.beginPath(); g.arc(X(pb),Yp(0),i===cen?6:4.5,0,7); g.fill(); g.stroke(); if(i===cen){ g.fillStyle=ink; g.fillText('retorno '+pb,Math.min(X(pb)+7,w-R-86),Yp(0)-7); } });
+  g.strokeStyle=ink; g.fillStyle=ink;
+  const ys=ANO0+Math.round(ano); { g.setLineDash([5,3]); g.beginPath(); g.moveTo(X(ys),T); g.lineTo(X(ys),h-B); g.stroke(); } g.setLineDash([]);
+  const kY=rows.findIndex(r=>r.ano===ys), q=ECO[CEN[cen].id][m].acum[kY]; g.fillStyle=CEN[cen].cor; g.beginPath(); g.arc(X(ys),Yp(q),3.5,0,7); g.fill();
+  $('gleg').innerHTML=`<span><i style="background:rgba(47,91,42,.25)"></i>faixa conservador a otimista</span>`+CEN.map(c=>`<span><i style="background:${c.cor}"></i>${c.id==='provavel'?'provável':c.id}</span>`).join('')+
+    `<span><i style="background:#c2571a"></i>tracejado: ${OUTRO()==='com'?'com':'sem'} quebra-vento, ${CEN[cen].id==='provavel'?'provável':CEN[cen].id}</span><span>● ano de retorno</span><span>${des==='com'?'com':'sem'} quebra-vento · R$ de 2026 · ${m==='com'?'com mão de obra própria':'sem pró-labore'}</span>`; }
+function dessinerC(){
+  const P=prep($('graphC')); if(!P) return; const {g,w,h}=P, css=getComputedStyle(document.documentElement), ink=css.getPropertyValue('--ink');
+  const key=$('indSel').value, v=(c,a)=>IND(c)[a][key]??null;
+  let mx=0,mn=0; for(const c of CEN) for(let a=0;a<=ANOS;a++){ const q=v(c.id,a); if(q!=null){mx=Math.max(mx,q);mn=Math.min(mn,q);} } mx=mx*1.1||1; mn=mn<0?mn*1.1:0;
+  const L=40,R=8,T=10,B=22, X=a=>L+a/ANOS*(w-L-R), Yp=eixos(g,w,h,L,R,T,B,mn,mx,val=>fmt(val,Math.abs(mx)<10?1:0));
+  for(let a=0;a<=ANOS;a+=10) g.fillText(ANO0+a,X(a)-14,h-6);
+  const a0=key==='seq_co2e'?1:0, lo=[],hi=[]; for(let a=a0;a<=ANOS;a++){ const qs=CEN.map(c=>v(c.id,a)); lo.push(Math.min(...qs)); hi.push(Math.max(...qs)); }
+  g.fillStyle='rgba(47,91,42,.16)'; g.beginPath(); hi.forEach((q,k)=>k?g.lineTo(X(k+a0),Yp(q)):g.moveTo(X(k+a0),Yp(q))); for(let k=lo.length-1;k>=0;k--) g.lineTo(X(k+a0),Yp(lo[k])); g.closePath(); g.fill();
+  CEN.forEach((c,i)=>{ g.strokeStyle=c.cor; g.globalAlpha=i===cen?1:.55; g.lineWidth=i===cen?2.6:1.3; g.beginPath(); for(let a=a0;a<=ANOS;a++){ const q=v(c.id,a); a===a0?g.moveTo(X(a),Yp(q)):g.lineTo(X(a),Yp(q)); } g.stroke(); });
+  g.globalAlpha=1; const y=Math.round(ano); g.strokeStyle=ink; g.setLineDash([3,3]); g.beginPath(); g.moveTo(X(y),T); g.lineTo(X(y),h-B); g.stroke(); g.setLineDash([]);
+  $('glegC').innerHTML=`<span><i style="background:rgba(47,91,42,.25)"></i>faixa conservador a otimista</span>`+CEN.map(c=>`<span><i style="background:${c.cor}"></i>${c.id==='provavel'?'provável':c.id}</span>`).join(''); }
+document.querySelector('details.sec').addEventListener('toggle',dessinerC);
+/* premissas editáveis: recalculam no navegador */
+const CAMPOS=['preco_cafe','preco_banana','impl_ha','custeio_ha','diaria','taxa'];
+function premPreenche(){ for(const k of CAMPOS){ const v=k==='taxa'?U[k]*100:U[k]; $('u_'+k).value=k==='ano_plantio'?v:Math.round(v*100)/100; } $('u_mo_propria').checked=!!U.mo_propria;
+  const mud=CAMPOS.filter(k=>Math.abs(U[k]-EPAD[k])>1e-9).length+(U.mo_propria!==EPAD.mo_propria?1:0); $('premAviso').textContent=mud?`${mud} premissa(s) alterada(s) neste navegador`:'valores padrão'; }
+function premTabelas(){
+  const S_=ECON.sens(MO,PE,U), an=R=>R.payback==null?'não retorna':`ano ${R.payback_anos} (${R.payback})`;
+  $('sensEcon').innerHTML='<tr><th>Premissa</th><th>Variação</th><th>Retorno com MO própria</th><th>Retorno sem pró-labore</th><th>VPL com MO</th><th>VPL sem</th></tr>'+
+    S_.map(s=>`<tr><td>${s.grupo}</td><td>${s.nome}</td><td class="n">${an(s.com)}</td><td class="n">${an(s.sem)}</td><td class="n ${s.com.vpl<0?'neg':'pos'}">${RS(s.com.vpl)}</td><td class="n ${s.sem.vpl<0?'neg':'pos'}">${RS(s.sem.vpl)}</td></tr>`).join('');
+  const nv=v=>typeof v==='number'?fmt(v,v<1?2:v<10?1:0):(v??'–'); const out=[];
+  const walk=(o,pre)=>{ for(const [k,v] of Object.entries(o)){ if(v&&typeof v==='object'&&!Array.isArray(v)){ if('fonte' in v) out.push([pre+k,v]); else walk(v,pre+k+' · '); } } };
+  for(const sec of ['geral','precos','mao_de_obra','implantacao','custeio','colheita']) walk(PE[sec],sec+' · ');
+  $('premEcon').innerHTML='<tr><th>Item</th><th>Valores</th><th>Unidade</th><th>Fonte e data</th></tr>'+out.map(([k,v])=>`<tr><td>${k.replace(/_/g,' ')}</td><td class="n">${nv(v.c)} · ${nv(v.p)} · ${nv(v.o)}</td><td>${v.unidade||''}</td><td>${v.fonte} (${v.data}) <span class="conf ${v.confianca}">${v.confianca}</span></td></tr>`).join('')+
+    (PE.referencias||[]).map(r=>`<tr><td>referência: ${r.item}</td><td class="n">${r.valor}</td><td></td><td>${r.fonte} (${r.data}), só conferência</td></tr>`).join(''); }
+let tPrem=0;
+function premMuda(){ for(const k of CAMPOS){ const v=parseFloat($('u_'+k).value); if(isFinite(v)) U[k]=k==='taxa'?v/100:k==='ano_plantio'?clamp(Math.round(v),ANO0-15,ANO0):v; }
+  U.mo_propria=$('u_mo_propria').checked; salvaU();
+  recalc(); maj(); premPreenche(); clearTimeout(tPrem); tPrem=setTimeout(premTabelas,250); }
+$('premForm').addEventListener('change',premMuda); $('premForm').addEventListener('input',e=>{ if(e.target.type==='checkbox') return; clearTimeout(tPrem); tPrem=setTimeout(premMuda,350); });
+$('premReset').onclick=()=>{ U=Object.assign({},EPAD); try{ localStorage.removeItem(UK); }catch(e){} recalc(); premPreenche(); premTabelas(); maj(); };
+const moSet=v=>{ U.mo_propria=v; salvaU(); premPreenche(); premTabelas(); maj(); };
+$('moCom').onclick=()=>moSet(true); $('moSem').onclick=()=>moSet(false);
+recalc();
+function fase(y,I){ const q=[]; if(y===0) return `Ano 0: plantio das mudas de café${des==='com'?', banana e grevílea':' e banana'}. Só custo de implantação.`;
+  if(I.kg_cafe<=0&&I.kg_banana<=0) q.push('Formação: sem colheita, só custeio e replantio das falhas.'); else if(I.sacas<0.6*Math.max(...IND(CEN[cen].id).map(i=>i.sacas))) q.push(y<8?'Primeiras colheitas: produção subindo.':'Produção reduzida (recepa ou lavoura velha).'); else q.push('Lavoura em produção.');
+  if(I.recepados) q.push(`Recepa de ${fmt(I.recepados)} cafés depois da colheita.`); if(I.renov_banana) q.push('Renovação do bananal.');
+  q.push(des==='com'?`Renque com <b>${fmt(I.h_qv,1)} m</b>: ${fmt(I.protegido_pct,0)}% do café protegido do vento, ${fmt(I.faixa_pct,0)}% na faixa de competição.`:'Sem quebra-vento: todo o café exposto ao vento, sem sombra nem competição de renque.'); return q.join(' '); }
+function taille(){ const w=box.clientWidth,h=box.clientHeight; renderer.setSize(w,h,false); renderer.domElement.style.width='100%'; renderer.domElement.style.height='100%'; camera.aspect=w/h; camera.updateProjectionMatrix(); sujo=true; dessiner(); }
+new ResizeObserver(taille).observe(box);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{dessiner();dessinerC();});
+function boucle(ts){ requestAnimationFrame(boucle);
+  if(lecture){ if(dernier){ ano=Math.min(ANOS,ano+(ts-dernier)/1000*1.2); construir(); if(Math.round(ano)!==+$('ano').value) maj(); if(ano>=ANOS){lecture=false;$('play').textContent='▶ Passar';syncM();} } dernier=ts; }
+  controls.update(); if(sujo){ renderer.render(scene,camera); sujo=false; } }
+function textos(){
+  const D=MO.diag, Pz=MO.plantio, Lz=D.linhas, Cl=D.clima, Qz=MO0.plantio.quebra_vento, Er=EST.resumo, n=Pz.plantas, ct=Pz.cortes, QVon=des==='com', n0=MO0.plantio.plantas, pvz=MO0.vento.perda;
+  $('lede').textContent=`${fmt(AREA_HA,2)} ha de talhão${CFG.regiao?' na '+CFG.regiao:''}, a ${fmt(D.altitude_m.media,0)} m. A simulação planta ${fmt(n.cafe)} cafés (a cada ${fmt(Pz.cafe_m,1)} m) e ${fmt(n.banana)} bananeiras (a cada ${fmt(Pz.banana_m,0)} m, alternadas) sobre as ${Pz.linhas} linhas de cultivo desenhadas${QVon?`, mais ${fmt(n.grevilea)} grevíleas em renque duplo nas bordas expostas ao vento`:`, sem quebra-vento: as linhas vão inteiras até a borda, com ${fmt(n.cafe-n0.cafe)} cafés e ${fmt(n.banana-n0.banana)} bananeiras a mais que no desenho com renque, e todo o café exposto ao vento`}. `+
+    `Ano 0 é o plantio; o painel mostra a rentabilidade do talhão em 30 anos, em R$ de 2026, sempre com a faixa dos três cenários. HIPÓTESE demonstrativa: café, banana, grevílea, implantação em 2026 e pastagem anterior não confirmados. Projeções condicionais, sem validação local.`;
+  const linhas=[['Área de estudo',`${fmt(D.area_estudo_ha,2)} ha · no limite geométrico de plantio ${fmt(Pz.area_plantavel_ha,2)} ha`],['Recorte mostrado no 3D',fmt(D.recorte_ha,2)+' ha'],
+    ['Centro',`${fmt(Math.abs(D.centro.lat),4)}° S, ${fmt(Math.abs(D.centro.lon),4)}° O`],['Altitude',`${fmt(D.altitude_m.min)} a ${fmt(D.altitude_m.max)} m`],
+    ['Declividade',`média ${fmt(D.declividade_pct.media,0)}% (${fmt(D.declividade_pct.p10,0)} a ${fmt(D.declividade_pct.p90,0)}%), face ${D.face_dominante.nome}`],
+    ['Clima local','Indisponível; aptidão não avaliada'],
+    ['Árvores existentes na área',`${D.arvores_existentes.manchas_de_copa_na_area} copas acima de ${fmt(D.arvores_existentes.altura_min_m,1)} m (${fmt(D.arvores_existentes.area_descontada_m2)} m² descontados)`],
+    ['Entorno no 3D',`${ENT.arvores.length} árvores de contexto (CHM ≥ 2,5 m)${ENT.volumes.length?', '+ENT.volumes.length+' estrutura(s) em volume simples':''}`],
+    ['Linhas de cultivo',`${Lz.trechos_validos} linhas válidas, ${fmt(Lz.comprimento_valido_m,0)} m (${fmt(Lz.densidade_linear_m_ha)} m/ha); ${Lz.trechos_curtos.length} trecho(s) curto(s) sem planta; ${fmt(Lz.comprimento_fora_m,0)} m fora da área; ${Lz.cruzamentos_entre_linhas.length} cruzamentos`],
+    ['Entrelinha medida',`mínimo ${fmt(Lz.entrelinha_m.min,2)} m · mediana ${fmt(Lz.entrelinha_m.mediana,2)} m · máximo ${fmt(Lz.entrelinha_m.max,2)} m`],
+    ['Ângulo com a curva de nível',`mediana ${fmt(Lz.angulo_com_curva_de_nivel_graus.mediana,1)}° · p90 ${fmt(Lz.angulo_com_curva_de_nivel_graus.p90,1)}° · máximo ${fmt(Lz.angulo_com_curva_de_nivel_graus.max,1)}° (declive ao longo da linha até ${fmt(Lz.declive_ao_longo_pct.max,1)}%)`],
+    [`Plantas no desenho ${QVon?'com':'sem'} quebra-vento`,`${fmt(n.cafe)} cafés (${fmt(Pz.por_ha.cafe)}/ha) · ${fmt(n.banana)} bananeiras (${fmt(Pz.por_ha.banana)}/ha)${QVon?` · ${fmt(n.grevilea)} grevíleas (${fmt(Pz.por_ha.grevilea)}/ha)`:' · nenhuma grevílea'}`],
+    ['Vias','Indisponíveis; sem métricas de corredores ou logística'],
+    QVon?['Cortados junto ao quebra-vento',`${fmt(ct.quebra_vento.cafe)} cafés e ${fmt(ct.quebra_vento.banana)} bananeiras a menos de ${fmt(CFG.recuo_cafe,1)} m de uma grevílea`]:['Onde ficaria o renque',`ocupado por ${fmt(n.cafe-n0.cafe)} cafés e ${fmt(n.banana-n0.banana)} bananeiras (no desenho com quebra-vento: ${fmt(n0.cafe)} cafés, ${fmt(n0.banana)} bananeiras e ${fmt(n0.grevilea)} grevíleas)`],
+    ['Cortados por árvore existente',`${fmt(ct.arvore_existente.cafe)} cafés e ${fmt(ct.arvore_existente.banana)} bananeiras`]];
+  $('hojeTab').innerHTML=linhas.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join('');
+  $('hojeTxt').innerHTML='<b>Premissas pendentes:</b> '+CFG.pendentes.join(', ')+'. '+Cl.metodo+'. <b>CHM nativo:</b> '+fmt(D.chm_nativo.negativos_pct,2)+'% negativo, preservado no diagnóstico. Copas propostas para preservação, a conferir. As árvores de contexto afetam a sombra visual e as exclusões; o efeito produtivo das copas existentes não está calibrado.';
+  const cid=CEN[1].id;
+  $('qvH').textContent=QVon?'Quebra-vento: faixa protegida e competição':'Vento: desenho sem quebra-vento';
+  $('qvTab').innerHTML=!QVon?'':'<tr><th>Altura do renque</th><th>Café protegido (cons. · prov. · otim.)</th><th>Faixa de competição</th><th>Café na competição</th></tr>'+
+    MO0.plantio.quebra_vento_tabela.map(l=>`<tr><td>${l.altura_m} m</td><td class="n">${fmt(l.c.cafe_protegido_pct,0)}% · ${fmt(l.p.cafe_protegido_pct,0)}% · ${fmt(l.o.cafe_protegido_pct,0)}%</td><td class="n">${fmt(l.p.faixa_competicao_m,1)} m</td><td class="n">${fmt(l.p.cafe_na_competicao_pct,0)}%</td></tr>`).join('');
+  $('qvTxt').textContent=!QVon?`Nenhuma grevílea, sem faixa protegida e sem faixa de competição. Todo o café fica exposto ao vento dominante assumido de ${fmt(Qz.azimute_vento_graus,0)}° (${Qz.fonte_vento}). Perda de produção do café por vento: ${fmt(pvz.c*100,0)}% no conservador, ${fmt(pvz.p*100,0)}% no provável e ${fmt(pvz.o*100,0)}% no otimista. Fonte: ${pvz.fonte}. Sem custo de muda, plantio e desrama de grevílea, sem sombra do renque sobre o café e sem a biomassa da grevílea no carbono.`:`Vento dominante assumido de ${fmt(Qz.azimute_vento_graus,0)}° (${Qz.fonte_vento}). Renque duplo de grevílea, ${fmt(Qz.entre_arvores_m,0)} m entre árvores, ${fmt(Qz.comprimento_m,0)} m de fila em ${Qz.trechos} trechos nas bordas ${Qz.bordas_usadas.join(', ')} (${fmt(Qz.perimetro_exposto_pct,0)}% do perímetro), sem vias fornecidas e sem árvore a menos de ${fmt(CFG.folga_dren,0)} m da drenagem simulada. `+
+    `Faixa protegida = ${QV.protecao.c} a ${QV.protecao.o} vezes a altura do renque, descontado o desnível: cada ponto usa o desnível até o renque a barlavento; não se assume uma orientação de encosta fixa. Proposta em quebra_vento.geojson, para ajustar.`;
+  const B=EST.proximidade_borda;
+  $('estTab').innerHTML=`<tr><td>Vias</td><td>Indisponíveis: nenhum vetor fornecido</td></tr><tr><td>Proximidade à borda</td><td>${B.pontas_abaixo_3m} de ${B.pontas.length} pontas a menos de 3 m do limite, incluindo trechos curtos</td></tr>`;
+  $('estTxt').textContent='Corredores, acessos e logística não calculados. Proximidade à borda é medida separada e não confirma cabeceira operacional. Drenagem é indicação estática do MDT; contribuições externas podem cruzar as bordas da moldura.';
+  $('metodo').innerHTML=[`Ano 0 = plantio (${ANO0}). Mudas nos pontos de plantio; crescimento Chapman-Richards por espécie, sem calibração local.`,
+    'Mortalidade no primeiro ano e depois; falhas de café e grevílea replantadas até o ano 3, depois viram falha até a recepa. Touceira de banana perdida é reposta com filhote.',
+    'Café: produção por idade até o pico, queda de 4% ao ano depois do declínio, recepa em metade das linhas num ano e na outra metade no seguinte (ano seguinte sem colheita, segundo ano com 70%). Média de safra alta e baixa: a bienalidade não é simulada.',
+    'Banana: primeiro cacho por volta do ano 2, renovação do bananal a cada tantos anos (metade da produção naquele ano).',
+    'Sombra: fração da copa do café coberta por copas mais altas ('+(QVon?'banana e grevílea':'só banana neste desenho')+'). Abaixo do limiar tolerado não há perda (DaMatta 2004); acima, a produção cai. Premissa a validar.',
+    QVon?'Vento: café fora da faixa protegida perde uma fração da produção; café dentro da faixa de competição junto ao renque perde outra. As duas frações são premissas a validar, sem medição local.':`Vento: sem renque, todo o café perde a fração de produção da premissa (${fmt(pvz.p*100,0)}% no provável, faixa de ${fmt(pvz.o*100,0)} a ${fmt(pvz.c*100,0)}%). Premissa a validar, sem medição local. Não há faixa de competição nem sombra de grevílea.`,
+    'Com e sem quebra-vento: mesmas linhas, mesmos preços e custos unitários. Mudam a contagem de pés (geometria do renque e do recuo), o custo da grevílea, a perda por vento, a competição, a sombra e o carbono (premissas).',
+    'Carbono: DAP por Jucker et al. 2017, biomassa aérea por Chave et al. 2014 (grevílea), coeficientes simples para café e banana, raízes pela razão do IPCC, fração de carbono 0,47. Linha de base: biomassa da pastagem (IPCC), descontada no estoque líquido. Solo: IPCC Tier 1, baixa confiança, à parte.',
+    'Caixa anual em R$ constantes de 2026. Ano 0: implantação (preparo, correção, mudas, plantio, cerca). Anos seguintes: custeio (adubo, fitossanitário, manutenção, replantio), colheita e pós-colheita por saca e por kg.',
+    'Mão de obra própria em dias-homem: com a chave ligada entra pela diária; desligada, o resultado mostra só o desembolso. Cenários: conservador = produção baixa, preço baixo e custo alto; otimista = o contrário.',
+    `VPL e TIR sobre o fluxo do ano 0 ao ano ${ANOS}, taxa real de ${fmt(U.taxa*100,1)}% a.a. Ano de retorno = ano em que o acumulado volta a zero e não fica mais negativo.`,
+    `Sensibilidade de densidade: a produção por pé varia com (espaçamento ÷ ${fmt(Pz.cafe_m,1)} m) elevado a ${fmt(MO.econ.expoente_densidade,1)}. Premissa a validar.`]
+    .map(t=>`<li>${t}</li>`).join('');
+  const sb=MO.sens_base, pc=v=>v==null?'–':(v>0?'+':'')+fmt(v,0)+'%';
+  $('sensTab').innerHTML=`<tr><th>Premissa</th><th>Variação</th><th>Café</th><th>Banana</th><th>CO2e ano 30</th></tr>`+
+    `<tr><td colspan="2">Provável (base): ${fmt(n.cafe)} cafés</td><td class="n">${fmt(sb.cafe_sc,0)} sc</td><td class="n">${fmt(sb.banana_t,1)} t</td><td class="n">${fmt(sb.co2e30,0)} t</td></tr>`+
+    MO.sens.map(s=>`<tr><td>${s.premissa}</td><td>${s.variacao} (${fmt(s.cafes)} cafés)</td><td class="n">${pc(s.d_cafe_sc_pct)}</td><td class="n">${pc(s.d_banana_t_pct)}</td><td class="n">${pc(s.d_co2e30_pct)}</td></tr>`).join('');
+  const nv=v=>typeof v==='number'?fmt(v,v<1?2:v<10?1:0):(v??'–');
+  $('premTab').innerHTML='<tr><th>Parâmetro</th><th>Valores</th><th>Fonte</th></tr>'+MO.premissas.map(p=>`<tr><td>${p.param}</td><td class="n">${nv(p.c)} · ${nv(p.p)} · ${nv(p.o)}</td><td>${p.fonte} <span class="conf ${p.conf}">${p.conf}</span></td></tr>`).join('');
+  $('rodape').textContent=`Protótipo Cardeal Map · levantamento por drone · ${CFG.crs} · motor 3D three.js (MIT) · estimativa de modelagem, sem validação de campo`;
+}
+camadasDesenho(); premPreenche(); premTabelas(); textos(); legenda(); taille(); vue('geral'); ano=ANO_INI; construir(); maj(); requestAnimationFrame(boucle);
+window.__app={construir,maj,zAt,P,TERR,grpCopas,grpLinhas,ECON,get U(){return U},get cen(){return cen},get AR(){return AR},IND,CEN,DES,DD,setDesenho,get des(){return des},ECOD:()=>ECOD,ECO:()=>ECO,renderer,POOL,gpu,LEVE,camera,controls,grpDren,grpQV,grpEst,mRede,mCond,THREE,get ano(){return ano},set ano(v){ano=v}};
+</script>
+</body>
+</html>

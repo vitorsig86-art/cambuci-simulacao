@@ -1,0 +1,9 @@
+{
+  "ambiente": "Chromium headless / SwiftShader",
+  "carregamento_ms": 985,
+  "triangulos_iniciais_com_sombras": 5221794,
+  "vertices_terreno": 146400,
+  "cpu_gpu_s_observada": 763.171875,
+  "observacao": "QA interativo interrompido após vários minutos sem completar a matriz; processo de software saturado. Não é medição de FPS.",
+  "ajuste": "detalhe móvel para GPU de software; sombras visuais ativadas pelo painel solar; grade métrica e número de plantas preservados"
+}

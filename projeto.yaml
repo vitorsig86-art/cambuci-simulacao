@@ -1,0 +1,102 @@
+modo: implantacao
+nome: Cambuci · implantação demonstrativa
+titulo_html: 'Cambuci: <em>hipótese de café, banana e quebra-vento</em>'
+regiao: Cambuci, RJ
+crs: EPSG:31984
+latitude: null
+dados:
+  pasta: dados
+  area_estudo: area_estudo.geojson
+  recorte: bbox.geojson
+  linhas: linhas_cultivo.geojson
+  estradas: null
+site:
+  cenario_inicial: provavel
+  desenho_inicial: sem
+  ano_inicial: 0
+  camera_inicial:
+    lado: norte
+    inclinacao_graus: 45
+    largura_area: 0.8
+saf:
+  ano0: 2026
+  anos: 30
+  parametros: parametros_especies.yaml
+  parametros_economicos: parametros_economicos.yaml
+  uso_anterior: pastagem_hipotetica
+plantio:
+  cafe_m: 0.8
+  banana_m: 8.0
+  alterna_m: 4.0
+  linha_min_m: 3.0
+  arvore_existente_min_m: 2.5
+  arvore_existente_folga_m: 1.0
+  cabeceira_min_m: 3.0
+clima: null
+vento:
+  azimute_de_graus: 45
+  fonte: 'hipótese demonstrativa herdada da Jurema: vento de 45 graus (NE); sem medição
+    ou rosa dos ventos de Cambuci'
+quebra_vento:
+  especie: grevilea
+  renques: 2
+  entre_arvores_m: 3.0
+  entre_renques_m: 3.0
+  recuo_borda_m: 1.0
+  exposicao_cos_min: 0.5
+  folga_drenagem_m: 2.0
+  recuo_cafe_m: 2.0
+  protecao_alturas:
+    c: 10
+    p: 12.5
+    o: 15
+  competicao_alturas:
+    c: 0.6
+    p: 0.5
+    o: 0.4
+  competicao_max_m:
+    c: 8
+    p: 6
+    o: 5
+  ajustado: quebra_vento_ajustado.geojson
+estradas:
+  largura_m: 4.0
+  faixa_livre_m: 2.0
+  trecho_perfil_m: 10
+  greide_critico_pct: 8
+  acumulacao_critica_m2: 100
+  cruzamento_min_m2: 100
+entorno:
+  incluir_area_estudo: true
+  altura_min_m: 2.5
+  altura_max_m: 30
+  diametro_min_m: 1.5
+  estrutura_area_min_m2: 6
+  max_arvores: 2500
+agua:
+  suavizacao_sigma_m: 1.0
+  preenchimento_max_m: 0.3
+  limiar_rede_m2: 100
+  limiar_concentracao_m2: 60
+  conducao_alinhamento: 0.8
+  conducao_declive_pct: 5
+  conducao_trecho_min_m: 8
+  risco_declividade_pct: 25
+  risco_acumulacao_m2: 60
+id: cambuci_implantacao
+demonstracao: true
+base_monetaria: 2026
+fuso: America/Sao_Paulo
+utc_offset_h: -3
+pendentes:
+- espécies e cultivares
+- data de implantação
+- uso anterior
+- espaçamentos
+- manejo
+- clima local
+- direção do vento
+- carbono e solo
+- custos e preços
+- datum vertical
+- procedência CRS vetorial

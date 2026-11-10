@@ -1,0 +1,95 @@
+{
+  "terreno": {
+    "vertices": 146400,
+    "triangulos": 291270,
+    "quantizacao_erro_max_m": 0.0049999999999954525,
+    "indices": "Uint32 explícito no template",
+    "invalidos": 0
+  },
+  "desenhos": {
+    "com": {
+      "plantas": {
+        "cafe": 2900,
+        "banana": 325,
+        "grevilea": 77
+      },
+      "brutas": {
+        "cafe": 3294,
+        "banana": 371
+      },
+      "cortes": {
+        "estrada": {
+          "cafe": 0,
+          "banana": 0
+        },
+        "quebra_vento": {
+          "cafe": 181,
+          "banana": 21
+        },
+        "arvore_existente": {
+          "cafe": 213,
+          "banana": 25
+        }
+      },
+      "distancia_max_linha_m": 1.7187932156272677e-14,
+      "fora": 0,
+      "sobre_exclusoes": 0
+    },
+    "sem": {
+      "plantas": {
+        "cafe": 3079,
+        "banana": 346,
+        "grevilea": 0
+      },
+      "brutas": {
+        "cafe": 3294,
+        "banana": 371
+      },
+      "cortes": {
+        "estrada": {
+          "cafe": 0,
+          "banana": 0
+        },
+        "quebra_vento": {
+          "cafe": 0,
+          "banana": 0
+        },
+        "arvore_existente": {
+          "cafe": 215,
+          "banana": 25
+        }
+      },
+      "distancia_max_linha_m": 1.7187932156272677e-14,
+      "fora": 0,
+      "sobre_exclusoes": 0
+    }
+  },
+  "sem_vias": {
+    "contrato_preservado": true,
+    "corredores_e_logistica": "indisponíveis",
+    "consumidores": [
+      "imp_02_plantio.gerar com/sem",
+      "modelo usa mesmo gerador",
+      "template com camada desabilitada"
+    ]
+  },
+  "contribuicao_externa_possivel": {
+    "norte": {
+      "celulas_1m": 0,
+      "comprimento_indicativo_m": 0
+    },
+    "sul": {
+      "celulas_1m": 200,
+      "comprimento_indicativo_m": 200
+    },
+    "oeste": {
+      "celulas_1m": 49,
+      "comprimento_indicativo_m": 49
+    },
+    "leste": {
+      "celulas_1m": 106,
+      "comprimento_indicativo_m": 106
+    }
+  },
+  "nota_drenagem": "indicação estática por gradiente do MDT suavizado; área externa ao voo desconhecida, vazão não estimada"
+}

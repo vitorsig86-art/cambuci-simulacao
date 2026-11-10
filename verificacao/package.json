@@ -1,0 +1,1 @@
+{"private":true,"scripts":{"test":"node testar_implantacao.cjs"},"devDependencies":{"playwright":"1.65.0"}}

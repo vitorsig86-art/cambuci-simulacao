@@ -1,0 +1,211 @@
+{
+ "arvores": 283,
+ "arvores_isoladas": 62,
+ "arvores_em_macico": 221,
+ "macicos": [
+  {
+   "id": 1,
+   "E": 194159.5,
+   "N": 7616565.6,
+   "h_max": 3.6,
+   "copa_continua_m": 7.2,
+   "arvores": 5
+  },
+  {
+   "id": 2,
+   "E": 194169.0,
+   "N": 7616565.6,
+   "h_max": 4.6,
+   "copa_continua_m": 7.0,
+   "arvores": 4
+  },
+  {
+   "id": 3,
+   "E": 194186.2,
+   "N": 7616565.6,
+   "h_max": 2.6,
+   "copa_continua_m": 7.7,
+   "arvores": 1
+  },
+  {
+   "id": 4,
+   "E": 194277.5,
+   "N": 7616565.6,
+   "h_max": 13.0,
+   "copa_continua_m": 9.3,
+   "arvores": 6
+  },
+  {
+   "id": 5,
+   "E": 194320.5,
+   "N": 7616565.6,
+   "h_max": 16.4,
+   "copa_continua_m": 8.9,
+   "arvores": 3
+  },
+  {
+   "id": 6,
+   "E": 194296.5,
+   "N": 7616561.6,
+   "h_max": 13.2,
+   "copa_continua_m": 15.6,
+   "arvores": 18
+  },
+  {
+   "id": 7,
+   "E": 194330.0,
+   "N": 7616561.6,
+   "h_max": 17.6,
+   "copa_continua_m": 10.6,
+   "arvores": 8
+  },
+  {
+   "id": 8,
+   "E": 194305.2,
+   "N": 7616555.6,
+   "h_max": 15.5,
+   "copa_continua_m": 7.5,
+   "arvores": 4
+  },
+  {
+   "id": 9,
+   "E": 194326.7,
+   "N": 7616553.1,
+   "h_max": 17.1,
+   "copa_continua_m": 7.6,
+   "arvores": 6
+  },
+  {
+   "id": 10,
+   "E": 194203.5,
+   "N": 7616552.6,
+   "h_max": 6.8,
+   "copa_continua_m": 7.7,
+   "arvores": 4
+  },
+  {
+   "id": 11,
+   "E": 194291.0,
+   "N": 7616552.4,
+   "h_max": 9.9,
+   "copa_continua_m": 12.6,
+   "arvores": 10
+  },
+  {
+   "id": 12,
+   "E": 194297.7,
+   "N": 7616548.9,
+   "h_max": 7.4,
+   "copa_continua_m": 10.0,
+   "arvores": 7
+  },
+  {
+   "id": 13,
+   "E": 194317.7,
+   "N": 7616548.6,
+   "h_max": 15.9,
+   "copa_continua_m": 9.9,
+   "arvores": 6
+  },
+  {
+   "id": 14,
+   "E": 194298.7,
+   "N": 7616540.1,
+   "h_max": 13.7,
+   "copa_continua_m": 20.3,
+   "arvores": 29
+  },
+  {
+   "id": 15,
+   "E": 194328.2,
+   "N": 7616528.1,
+   "h_max": 17.3,
+   "copa_continua_m": 9.9,
+   "arvores": 12
+  },
+  {
+   "id": 16,
+   "E": 194315.7,
+   "N": 7616525.6,
+   "h_max": 11.4,
+   "copa_continua_m": 18.0,
+   "arvores": 23
+  },
+  {
+   "id": 17,
+   "E": 194307.0,
+   "N": 7616522.6,
+   "h_max": 4.6,
+   "copa_continua_m": 16.1,
+   "arvores": 20
+  },
+  {
+   "id": 18,
+   "E": 194300.2,
+   "N": 7616503.9,
+   "h_max": 3.5,
+   "copa_continua_m": 9.5,
+   "arvores": 4
+  },
+  {
+   "id": 19,
+   "E": 194286.2,
+   "N": 7616479.4,
+   "h_max": 16.4,
+   "copa_continua_m": 14.2,
+   "arvores": 18
+  },
+  {
+   "id": 20,
+   "E": 194269.2,
+   "N": 7616478.1,
+   "h_max": 20.4,
+   "copa_continua_m": 14.1,
+   "arvores": 15
+  },
+  {
+   "id": 21,
+   "E": 194273.0,
+   "N": 7616475.4,
+   "h_max": 20.6,
+   "copa_continua_m": 12.3,
+   "arvores": 15
+  },
+  {
+   "id": 22,
+   "E": 194132.7,
+   "N": 7616449.1,
+   "h_max": 2.6,
+   "copa_continua_m": 13.7,
+   "arvores": 3
+  }
+ ],
+ "cortadas_pelo_limite": 0,
+ "picos_dentro_da_area": 11,
+ "arvores_dentro_da_area": 55,
+ "filtrados": {
+  "fragmento de copa (< diametro_min_m, borda do recorte ou lasca entre copas)": 10
+ },
+ "construcoes_volume": 0,
+ "construcoes": [],
+ "duvidas_so_no_orto": [],
+ "criterio": {
+  "cor": "cerâmico, claro (metálico) ou azulado no orto",
+  "rugosidade_max_m": 0.35,
+  "retangularidade_min": 0.7,
+  "area_min_m2": 6.0,
+  "macico_diametro_m": 7.0,
+  "macico_passo_m": 3.5
+ },
+ "altura_m": {
+  "p10": 3.6,
+  "mediana": 12.6,
+  "p90": 18.1,
+  "max": 22.7
+ },
+ "copa_m": {
+  "p10": 3.9,
+  "mediana": 4.3,
+  "p90": 4.8
+ }
+}

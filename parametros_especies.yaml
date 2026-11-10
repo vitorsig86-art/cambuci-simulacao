@@ -1,0 +1,397 @@
+especies:
+  grevilea:
+    nome: Grevílea (quebra-vento)
+    h0_m: 0.4
+    Hmax_m:
+      c: 15
+      p: 18
+      o: 22
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: Grevillea robusta adulta em
+        renque, 15 a 25 m (Embrapa Florestas, série sobre grevílea em cafezais e quebra-ventos)'
+      confianca: baixa
+    k_altura:
+      c: 0.1
+      p: 0.12
+      o: 0.15
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: Chapman-Richards; dá cerca de
+        6 m aos 5 anos e 11 m aos 10 anos no provável'
+      confianca: baixa
+    copa_max_m:
+      c: 5
+      p: 6
+      o: 7
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: copa estreita, com desrama dos
+        galhos baixos'
+      confianca: baixa
+    k_copa:
+      c: 0.1
+      p: 0.12
+      o: 0.15
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    densidade_madeira:
+      c: 0.5
+      p: 0.54
+      o: 0.58
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: Global Wood Density Database (Zanne et al. 2009),
+        Grevillea robusta perto de 0,54 g/cm3: conferir'
+      confianca: baixa
+    opacidade_copa:
+      c: 0.7
+      p: 0.6
+      o: 0.5
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar (copa rala'
+      sombra filtrada): null
+      confianca: baixa
+    mortalidade_ano1:
+      c: 0.15
+      p: 0.08
+      o: 0.04
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    mortalidade_anual:
+      c: 0.01
+      p: 0.005
+      o: 0.002
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+  banana:
+    nome: Bananeira (touceira a cada 8 m na linha)
+    h0_m: 0.5
+    Hmax_m:
+      c: 2.8
+      p: 3.2
+      o: 3.8
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: pseudocaule de cultivar tipo
+        prata; porte menor pelo frio de altitude'
+      confianca: baixa
+    k_altura:
+      c: 0.8
+      p: 1.0
+      o: 1.3
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    copa_max_m:
+      c: 2.5
+      p: 3.0
+      o: 3.5
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    k_copa:
+      c: 0.8
+      p: 1.0
+      o: 1.3
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    biomassa_seca_max_kg:
+      c: 8
+      p: 12
+      o: 18
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar (pseudocaule'
+      folhas e rizoma por touceira): null
+      confianca: baixa
+    opacidade_copa:
+      c: 0.6
+      p: 0.5
+      o: 0.5
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    mortalidade_ano1:
+      c: 0.2
+      p: 0.1
+      o: 0.05
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar (frio e seca no pegamento)'
+      confianca: baixa
+    mortalidade_anual:
+      c: 0.05
+      p: 0.03
+      o: 0.02
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: touceira perdida é replantada
+        com filhote da própria área'
+      confianca: baixa
+    renovacao_anos:
+      c: 6
+      p: 8
+      o: 10
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: renovação do bananal (replantio
+        da touceira) a cada n anos; no ano da renovação a touceira produz metade'
+      confianca: baixa
+    producao:
+      inicio_idade:
+        c: 2
+        p: 2
+        o: 1
+        fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+          histórica não revalidada: premissa a validar: primeiro cacho de 14 a 24
+          meses em clima frio'
+        confianca: baixa
+      pico_idade:
+        c: 4
+        p: 3
+        o: 2
+        fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+          histórica não revalidada: premissa a validar'
+        confianca: baixa
+      kg_planta_pico:
+        c: 5
+        p: 10
+        o: 16
+        fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+          histórica não revalidada: premissa a validar; kg de cacho por touceira por
+          ano. Referência: média nacional perto de 14 t/ha com cerca de 1.600 touceiras/ha
+          (IBGE PAM) = 9 kg/touceira. A 1.190 m a banana é marginal pelo frio'
+        confianca: baixa
+      reducao_sombra:
+        c: 0.9
+        p: 0.9
+        o: 0.9
+        fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+          histórica não revalidada: premissa a validar: produção x (1 - 0,9 x sombra)'
+        confianca: baixa
+  cafe:
+    nome: Café arábica (a cada 0,8 m na linha)
+    h0_m: 0.3
+    Hmax_m:
+      c: 2.0
+      p: 2.3
+      o: 2.6
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar (altura mantida por decote)'
+      confianca: baixa
+    k_altura:
+      c: 0.35
+      p: 0.45
+      o: 0.55
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: cerca de 1,6 m aos 3 anos no
+        provável'
+      confianca: baixa
+    copa_max_m:
+      c: 1.4
+      p: 1.6
+      o: 1.8
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    k_copa:
+      c: 0.35
+      p: 0.45
+      o: 0.55
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    biomassa_coef:
+      c: 0.8
+      p: 1.0
+      o: 1.3
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: biomassa aérea seca (kg) = coef
+        x H^1,8'
+      confianca: baixa
+    opacidade_copa:
+      c: 0.7
+      p: 0.7
+      o: 0.7
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    mortalidade_ano1:
+      c: 0.15
+      p: 0.08
+      o: 0.04
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: falhas do primeiro ano, replantadas'
+      confianca: baixa
+    mortalidade_anual:
+      c: 0.015
+      p: 0.01
+      o: 0.005
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: replantadas até o ano 3; depois
+        viram falha até a próxima recepa'
+      confianca: baixa
+    replantio_ate_ano:
+      c: 3
+      p: 3
+      o: 3
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar'
+      confianca: baixa
+    renovacao_anos:
+      c: 12
+      p: 14
+      o: 16
+      fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+        histórica não revalidada: premissa a validar: recepa (poda de renovação) a
+        cada n anos, metade das linhas num ano e metade no seguinte. Ano seguinte
+        à recepa sem colheita, segundo ano com 70%'
+      confianca: baixa
+    producao:
+      inicio_idade:
+        c: 2
+        p: 2
+        o: 2
+        fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+          histórica não revalidada: premissa a validar: primeira colheita pequena
+          no ano 3'
+        confianca: baixa
+      pico_idade:
+        c: 6
+        p: 5
+        o: 4
+        fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+          histórica não revalidada: premissa a validar'
+        confianca: baixa
+      declinio_apos:
+        c: 10
+        p: 11
+        o: 12
+        fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+          histórica não revalidada: premissa a validar: depois desta idade (desde
+          o plantio ou a recepa) a produção cai 4% ao ano'
+        confianca: baixa
+      kg_planta_pico:
+        c: 0.4
+        p: 0.6
+        o: 0.85
+        fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+          histórica não revalidada: premissa a validar; kg de café beneficiado por
+          planta por ano, média de safra alta e baixa. Com 2.173 plantas/ha dá 14,
+          22 e 31 sc/ha. Referência: produtividade média do arábica 24,1 sc/ha (Conab,
+          4º levantamento da safra 2025). Clima no limite frio da faixa apta'
+        confianca: baixa
+      sombra_tolerada:
+        c: 0.35
+        p: 0.4
+        o: 0.5
+        fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+          histórica não revalidada: café tolera sombra moderada sem perder produção
+          (DaMatta 2004, Field Crops Research 86:99); o limiar é premissa a validar.
+          Acima dele a produção cai 1,2 x o excesso'
+        confianca: baixa
+efeitos:
+  perda_vento_sem_protecao:
+    c: 0.15
+    p: 0.1
+    o: 0.05
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: premissa a validar: perda de produção do café fora
+      da faixa protegida. Base qualitativa: vento causa lesão nas folhas e favorece
+      mancha aureolada (Embrapa); renques de grevílea são recomendação antiga do IBC
+      para cafezais (Embrapa Florestas). Sem número medido para este lugar'
+    confianca: baixa
+  perda_faixa_competicao:
+    c: 0.4
+    p: 0.3
+    o: 0.2
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: premissa a validar: perda de produção do café dentro
+      da faixa de competição por água, nutrientes e sombra junto ao renque'
+    confianca: baixa
+crescimento:
+  forma_p:
+    c: 1.3
+    p: 1.3
+    o: 1.3
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: Chapman-Richards H(t) = h0 + (Hmax - h0)(1 - e^(-k
+      t))^p'
+    confianca: baixa
+carbono:
+  dap_por_altura_copa:
+    c: 0.557
+    p: 0.557
+    o: 0.557
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: Jucker et al. 2017, Global Change Biology 23:177:
+      DAP = 0,557 (H x copa)^0,809, angiospermas'
+    confianca: baixa
+  agb_chave2014:
+    c: 0.0673
+    p: 0.0673
+    o: 0.0673
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: Chave et al. 2014, Global Change Biology 20:3177:
+      AGB = 0,0673 (rho D^2 H)^0,976'
+    confianca: baixa
+  raiz_parte_aerea:
+    c: 0.2
+    p: 0.24
+    o: 0.28
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: IPCC 2006 V4 tab. 4.4, razão raiz/parte aérea de floresta
+      tropical (0,20 a 0,28 conforme o porte): conferir o Refinement 2019'
+    confianca: baixa
+  fracao_carbono:
+    c: 0.47
+    p: 0.47
+    o: 0.47
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: IPCC 2006 V4 tab. 4.3'
+    confianca: baixa
+  decomposicao_k_ano:
+    c: 0.9
+    p: 0.6
+    o: 0.4
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: premissa a validar: restos de plantas mortas, recepa
+      e renovação decaem e^(-k t)'
+    confianca: baixa
+  pastagem_biomassa_tC_ha:
+    c: 7.6
+    p: 7.6
+    o: 3.0
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: linha de base: IPCC 2006 V4 tab. 6.4, pastagem tropical
+      úmida, 16,1 t de matéria seca/ha (parte aérea e raízes) x 0,47 = 7,6 t C/ha.
+      Otimista = pasto ralo, premissa a validar. Descontada do estoque do sistema'
+    confianca: baixa
+solo:
+  SOCref_tC_ha:
+    c: 47
+    p: 47
+    o: 65
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: IPCC 2006 V4 tab. 2.3, tropical úmido: argila de baixa
+      atividade 47, alta atividade 65. Tipo de solo não conhecido'
+    confianca: baixa
+  fator_base_pastagem:
+    c: 1.0
+    p: 0.97
+    o: 0.9
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: IPCC 2006 V4 tab. 6.2: pastagem nominal 1,00, moderadamente
+      degradada 0,97; 0,90 é premissa. Estado do pasto não avaliado em campo'
+    confianca: baixa
+  fator_sistema:
+    c: 1.0
+    p: 1.05
+    o: 1.1
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: premissa a validar: cultura perene arborizada tratada
+      entre pastagem nominal (1,00) e melhorada (1,17), IPCC 2006 tab. 6.2'
+    confianca: baixa
+  anos_transicao:
+    c: 20
+    p: 20
+    o: 20
+    fonte: 'HIPÓTESE Cambuci, valor herdado da Jurema, sem calibração local. Referência
+      histórica não revalidada: IPCC 2006 V4 cap. 2 (D = 20 anos)'
+    confianca: baixa
